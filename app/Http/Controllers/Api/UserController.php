@@ -23,7 +23,7 @@ class UserController extends Controller
             return $this->success($user, 'User has been created');
         }
 
-        return $this->error('user not created', 400);
+        return $this->error('User not created', 400);
     }
 
     public function update(UserRequest $request, User $user){
@@ -32,7 +32,7 @@ class UserController extends Controller
             return $this->success($user, 'User has been updated');
         }
 
-        return $this->error('user not updated', 400);
+        return $this->error('User is not updated', 400);
     }
 
     public function destroy(User $user){
