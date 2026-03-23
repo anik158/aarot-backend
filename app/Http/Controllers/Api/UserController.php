@@ -16,6 +16,10 @@ class UserController extends Controller
 
     use ResponseStatus;
 
+    public function login(AuthLoginRequest $request){
+
+    }
+
     public function store(UserRequest $request){
         if($request->validated()){
             $user = User::create($request->validated());
