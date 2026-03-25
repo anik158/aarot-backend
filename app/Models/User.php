@@ -3,7 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use App\Models\Admin\Order;
+use App\Models\User\Order;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -46,7 +46,7 @@ class User extends Authenticatable
     }
 
     public function orders(): HasMany {
-        return $this->hasMany(Order::class)->with('products')->latest();
+        return $this->hasMany(Order::class)->latest();
     }
 
     public function image_path() {
