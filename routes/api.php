@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\CheckoutController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
@@ -11,3 +12,6 @@ Route::post('/login', [UserController::class, 'login']);
 Route::post('/users', [UserController::class, 'store']);
 Route::post('/logout', [UserController::class, 'logout'])->middleware('auth:api');
 
+Route::middleware('auth:api')->group(function () {
+    Route::post('/checkout', [CheckoutController::class, 'store']);
+});

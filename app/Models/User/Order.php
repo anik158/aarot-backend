@@ -38,7 +38,6 @@ class Order extends Model
         'total'           => 'decimal:2',
     ];
 
-    // Generate beautiful order number automatically
     protected static function boot()
     {
         parent::boot();
