@@ -38,7 +38,7 @@ class CheckoutController extends Controller
             \Log::error($e->getMessage(), [
                 'line' => $e->getLine(),
             ]);
-            return $this->error($e->getMessage(), 500);
+            return $this->error('Something went error', 500);
         }
     }
 }
