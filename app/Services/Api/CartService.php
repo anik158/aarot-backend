@@ -71,7 +71,7 @@ class CartService
                     'price'      => $product->price,
                     // Store rich data for display
                     'title'      => $product->name,
-                    'image'      => $product->first_image,
+                    'image'      => $product->first_image ? asset($product->first_image) : null,
                     'color_name' => $colorName,
                     'size_name'  => $sizeName,
                 ]
@@ -96,7 +96,7 @@ class CartService
                     'qty'        => $qty,
                     'price'      => $product->price,
                     'title'      => $product->name,
-                    'image'      => $product->first_image,
+                    'image'      => $product->first_image ? asset($product->first_image) : null,
                     'colorName'  => $colorName,
                     'sizeName'   => $sizeName,
                 ];
@@ -116,11 +116,33 @@ class CartService
                 ->where('user_id', $this->user->id)
                 ->first();
 
-            return $cart ? $cart->items : [];
+            if (!$cart) return [];
+
+            return $cart->items->map(function ($item) {
+                return [
+                    'productId' => $item->product_id,
+                    'colorId'   => $item->color_id,
+                    'sizeId'    => $item->size_id,
+                    'qty'       => $item->quantity,
+                    'price'     => $item->price,
+                    'title'     => $item->product ? $item->product->name : 'Unknown',
+                    'image'     => ($item->product && $item->product->first_image) ? asset($item->product->first_image) : null,
+                    'colorName' => $item->color ? $item->color->name : null,
+                    'sizeName'  => $item->size ? $item->size->name : null,
+                ];
+            });
         } else {
             $key = $this->getCartKey($guestToken);
             $cartData = Redis::get($key);
-            return $cartData ? json_decode($cartData, true) : [];
+            $cart = $cartData ? json_decode($cartData, true) : [];
+            
+            $formattedCart = array_values($cart);
+            foreach ($formattedCart as &$item) {
+                if (!empty($item['image']) && !str_starts_with($item['image'], 'http')) {
+                    $item['image'] = asset($item['image']);
+                }
+            }
+            return $formattedCart;
         }
     }
 
