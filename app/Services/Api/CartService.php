@@ -135,7 +135,7 @@ class CartService
             $key = $this->getCartKey($guestToken);
             $cartData = Redis::get($key);
             $cart = $cartData ? json_decode($cartData, true) : [];
-            
+
             $formattedCart = array_values($cart);
             foreach ($formattedCart as &$item) {
                 if (!empty($item['image']) && !str_starts_with($item['image'], 'http')) {
@@ -202,5 +202,47 @@ class CartService
     public function removeItem($productId, $colorId = null, $sizeId = null, $guestToken = null)
     {
         return $this->updateQuantity($productId, $colorId, $sizeId, 0, $guestToken);
+    }
+
+
+    public function mergeGuestCart($guestToken)
+    {
+        if (!$this->user || !$guestToken) {
+            return false;
+        }
+
+        $key = $this->getCartKey($guestToken);
+        $guestCartData = Redis::get($key);
+
+        if (!$guestCartData) {
+            return true; // no guest cart to merge
+        }
+
+        $guestCart = json_decode($guestCartData, true);
+
+        $cart = Cart::firstOrCreate(['user_id' => $this->user->id]);
+
+        foreach ($guestCart as $item) {
+            CartItem::updateOrCreate(
+                [
+                    'cart_id'    => $cart->id,
+                    'product_id' => $item['productId'],
+                    'color_id'   => $item['colorId'],
+                    'size_id'    => $item['sizeId'],
+                ],
+                [
+                    'quantity'   => DB::raw("quantity + " . ($item['qty'] ?? 1)),
+                    'price'      => $item['price'],
+                    'title'      => $item['title'] ?? null,
+                    'image'      => $item['image'] ?? null,
+                    'color_name' => $item['colorName'] ?? null,
+                    'size_name'  => $item['sizeName'] ?? null,
+                ]
+            );
+        }
+
+        Redis::del($key);
+
+        return true;
     }
 }

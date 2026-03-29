@@ -92,4 +92,18 @@ class CartController extends Controller
             return $this->error($e->getMessage(), 422);
         }
     }
+
+    public function merge(Request $request)
+    {
+        try {
+            $guestToken = $request->header('X-Guest-Token');
+
+            $this->cartService->mergeGuestCart($guestToken);
+
+            return $this->success(null, 'Cart merged successfully');
+        } catch (\Exception $e) {
+            \Log::error('Cart Merge Error: ' . $e->getMessage());
+            return $this->error('Failed to merge cart', 422);
+        }
+    }
 }

@@ -12,6 +12,7 @@ Route::get('/products/{id}', [ProductController::class, 'show']);
 Route::post('/login', [UserController::class, 'login']);
 Route::post('/users', [UserController::class, 'store']);
 Route::post('/logout', [UserController::class, 'logout'])->middleware('auth:api');
+Route::post('/cart/merge', [CartController::class, 'merge']);
 
 Route::middleware('auth:api')->group(function () {
     Route::post('/checkout', [CheckoutController::class, 'store']);
