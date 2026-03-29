@@ -17,6 +17,7 @@ Route::post('/cart/merge', [CartController::class, 'merge']);
 
 Route::middleware('auth:api')->group(function () {
     Route::post('/checkout', [CheckoutController::class, 'store']);
+    Route::get('/my-orders', [OrderController::class, 'index']);
     Route::get('/orders/{orderNumber}', [OrderController::class, 'showByOrderNumber']);
 });
 

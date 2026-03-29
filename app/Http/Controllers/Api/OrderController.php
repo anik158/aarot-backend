@@ -9,6 +9,19 @@ use App\Traits\ResponseStatus;
 class OrderController extends Controller
 {
     use ResponseStatus;
+    /**
+     * Get all orders for the authenticated user
+     */
+    public function index()
+    {
+        $orders = Order::with(['items.product'])
+            ->where('user_id', auth('api')->id())
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        return $this->success($orders, 'Orders retrieved successfully');
+    }
+
 
     public function showByOrderNumber($orderNumber)
     {
