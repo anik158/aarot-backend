@@ -59,23 +59,36 @@ class CartService
             // === Logged-in User → Database ===
             $cart = Cart::firstOrCreate(['user_id' => $this->user->id]);
 
-            $cartItem = CartItem::updateOrCreate(
-                [
-                    'cart_id'    => $cart->id,
-                    'product_id' => $productId,
-                    'color_id'   => $colorId,
-                    'size_id'    => $sizeId,
-                ],
-                [
-                    'quantity'   => DB::raw("quantity + {$qty}"),
+            $cartItem = CartItem::where([
+                'cart_id'    => $cart->id,
+                'product_id' => $productId,
+                'color_id'   => $colorId,
+                'size_id'    => $sizeId,
+            ])->first();
+
+            if ($cartItem) {
+                $cartItem->update([
+                    'quantity'   => $qty,
                     'price'      => $product->price,
-                    // Store rich data for display
                     'title'      => $product->name,
                     'image'      => $product->first_image ? asset($product->first_image) : null,
                     'color_name' => $colorName,
                     'size_name'  => $sizeName,
-                ]
-            );
+                ]);
+            } else {
+                $cartItem = CartItem::create([
+                    'cart_id'    => $cart->id,
+                    'product_id' => $productId,
+                    'color_id'   => $colorId,
+                    'size_id'    => $sizeId,
+                    'quantity'   => $qty,
+                    'price'      => $product->price,
+                    'title'      => $product->name,
+                    'image'      => $product->first_image ? asset($product->first_image) : null,
+                    'color_name' => $colorName,
+                    'size_name'  => $sizeName,
+                ]);
+            }
 
             return $cartItem;
         } else {
@@ -87,7 +100,7 @@ class CartService
             $itemKey = "{$productId}_{$colorId}_{$sizeId}";
 
             if (isset($cart[$itemKey])) {
-                $cart[$itemKey]['qty'] += $qty;
+                $cart[$itemKey]['qty'] = $qty;
             } else {
                 $cart[$itemKey] = [
                     'productId'  => $productId,
@@ -173,7 +186,7 @@ class CartService
                 if ($qty <= 0) {
                     $cartItem->delete();
                 } else {
-                    $cartItem->update(['quantity' => $qty]);
+                    $cartItem->update(['quantity' => $qty]); // Set exact quantity
                 }
             }
             return $cartItem;
@@ -189,7 +202,7 @@ class CartService
                 if ($qty <= 0) {
                     unset($cart[$itemKey]);
                 } else {
-                    $cart[$itemKey]['qty'] = $qty;
+                    $cart[$itemKey]['qty'] = $qty; // Set exact quantity
                 }
             }
 

@@ -3,7 +3,6 @@
 namespace App\Models\User;
 
 use App\Models\Admin\Coupon;
-use App\Models\Admin\OrderItem;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
