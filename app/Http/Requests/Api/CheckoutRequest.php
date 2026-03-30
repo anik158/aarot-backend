@@ -21,12 +21,12 @@ class CheckoutRequest extends FormRequest
      */
     public function rules(): array
     {
-        \Log::info($this->all());
         return [
             'name'                  => 'required|string|min:3|max:255',
             'phone'                 => 'required|string|max:20',
             'address'               => 'required|string|min:10',
             'city'                  => 'required|string|max:100',
+            'payment_method' => 'required|in:cod,stripe',
 
             'cart_items'            => 'required|array|min:1',
             'cart_items.*.productId'=> 'required|integer|exists:products,id',

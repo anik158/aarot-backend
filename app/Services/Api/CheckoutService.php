@@ -14,6 +14,7 @@ class CheckoutService
         return DB::transaction(function () use ($user, $validatedData) {
 
             $cartItems = $validatedData['cart_items'];
+            $paymentMethod = $validatedData['payment_method'];
             $subTotal = 0;
 
             foreach ($cartItems as $cartItem) {
@@ -38,8 +39,8 @@ class CheckoutService
                 'discount_amount'  => 0,
                 'total'            => $subTotal,
                 'status'           => 'pending',
-                'payment_status'   => 'pending',
-                'payment_method'   => 'cash_on_delivery',
+                'payment_status'   => $paymentMethod === 'cod' ? 'pending' : 'unpaid',
+                'payment_method'   => $paymentMethod,
                 'shipping_name'    => $validatedData['name'],
                 'shipping_phone'   => $validatedData['phone'],
                 'shipping_address' => $validatedData['address'],

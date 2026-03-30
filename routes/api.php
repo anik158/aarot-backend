@@ -3,7 +3,9 @@
 use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\CheckoutController;
 use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\StripeWebhookController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -19,6 +21,8 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/checkout', [CheckoutController::class, 'store']);
     Route::get('/my-orders', [OrderController::class, 'index']);
     Route::get('/orders/{orderNumber}', [OrderController::class, 'showByOrderNumber']);
+    Route::post('/payment/stripe/{order_number}', [PaymentController::class, 'createStripeSession']);
+    Route::post('/stripe/webhook', [StripeWebhookController::class, 'handle']);
 });
 
 Route::prefix('cart')->group(function () {
