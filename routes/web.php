@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\StripeWebhookController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -24,4 +25,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.','middleware' => ['admin']],f
     Route::resource('products', ProductController::class);
 });
 
+Route::post('/stripe/webhook', [StripeWebhookController::class, 'handle']);
 
+
+Route::get('/test-webhook', function () {
+    \Log::info('Test webhook endpoint reached!');
+    return response()->json(['message' => 'Webhook endpoint is reachable']);
+});

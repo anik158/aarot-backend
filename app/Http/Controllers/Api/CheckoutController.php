@@ -20,6 +20,7 @@ class CheckoutController extends Controller
 
     public function store(CheckoutRequest $request)
     {
+        \Log::info('Checkout');
         try {
             $order = $this->checkoutService->processCheckout(
                 $request->user(),
