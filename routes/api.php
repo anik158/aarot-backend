@@ -1,10 +1,10 @@
 <?php
 
-use App\Http\Controllers\Admin\StripeWebhookController;
 use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\CheckoutController;
 use App\Http\Controllers\Api\ColorController;
+use App\Http\Controllers\Api\FavoriteController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\ProductController;
@@ -29,6 +29,8 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/checkout', [CheckoutController::class, 'store']);
     Route::get('/my-orders', [OrderController::class, 'index']);
     Route::get('/orders/{orderNumber}', [OrderController::class, 'showByOrderNumber']);
+    Route::post('/favorites/{productId}', [FavoriteController::class, 'toggle']);
+    Route::get('/favorites/{productId}/status', [FavoriteController::class, 'checkStatus']);
     Route::post('/payment/stripe/session', [PaymentController::class, 'createStripeSession']);});
 
 Route::prefix('cart')->group(function () {
