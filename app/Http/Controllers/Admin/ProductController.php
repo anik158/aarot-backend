@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\ProductRequest;
+use App\Http\Resources\ProductResource;
 use App\Models\Admin\Color;
 use App\Models\Admin\Product;
 use App\Models\Admin\Size;
+use App\Models\Category;
 use App\Services\ProductService;
 use App\Traits\ResponseStatus;
 use Illuminate\Http\Request;
@@ -43,10 +45,14 @@ class ProductController extends Controller
     {
         $colors = Color::all();
         $sizes = Size::all();
+        $categories = Category::where('status', Category::STATUS_ACTIVE )->get();
+
+
         return view('admin.product.add-edit', [
             'product' => null,
             'colors' => $colors,
-            'sizes' => $sizes
+            'sizes' => $sizes,
+            'categories' => $categories
         ]);
     }
 
@@ -64,7 +70,9 @@ class ProductController extends Controller
     public function show(Product $product)
     {
         $product->load(['colors', 'sizes']);
-        return view('admin.product.show', compact('product'));
+
+        $categories = Category::where('status', Category::STATUS_ACTIVE)->get();
+        return view('admin.product.show', compact('product','categories'));
     }
 
     public function edit(Product $product)
@@ -72,7 +80,9 @@ class ProductController extends Controller
         $colors = Color::all();
         $sizes = Size::all();
         $product->load(['colors', 'sizes']);
-        return view('admin.product.add-edit', compact('product', 'colors', 'sizes'));
+        $categories = Category::where('status', Category::STATUS_ACTIVE )->get();
+
+        return view('admin.product.add-edit', compact('product', 'colors', 'sizes','categories'));
     }
 
     public function update(ProductRequest $request, Product $product)

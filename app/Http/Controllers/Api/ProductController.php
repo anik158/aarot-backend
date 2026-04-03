@@ -11,22 +11,26 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of the latest products.
-     */
+
+    public function featured(Request $request)
+    {
+        $limit = $request->get('limit', 3);
+        $products = Product::with(['colors', 'sizes'])
+            ->where('status', 1)
+            ->orderBy('id', 'desc')
+            ->limit($limit)
+            ->get();
+
+        return ProductResource::collection($products);
+    }
+
+
     public function index(Request $request)
     {
         $productQuery = Product::with([ 'reviews']);
 
 
-        if($request->has('limit'))
-        {
-            $productQuery->limit($request->limit);
 
-        }
-
-
-//        Filter by color
         if($request->has('color') && $request->color !='')
         {
             $productQuery->whereHas('colors', function($q) use($request){
@@ -34,7 +38,6 @@ class ProductController extends Controller
             });
         }
 
-//        Filter by size
         if($request->has('size') && $request->size !='')
         {
             $productQuery->whereHas('sizes', function($q) use($request){
@@ -59,9 +62,7 @@ class ProductController extends Controller
 
     }
 
-    /**
-     * Display the specified product.
-     */
+
     public function show($id)
     {
         try{
