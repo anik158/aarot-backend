@@ -22,29 +22,41 @@ class ProductRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'name' => 'required|string|max:255',
-            'qty' => 'required|integer|min:0',
-            'price' => 'required|numeric|min:0',
+            'name'        => 'required|string|max:255',
+            'qty'         => 'required|integer|min:0',
+            'price'       => 'required|numeric|min:0',
             'description' => 'nullable|string',
-            'status' => 'required|in:0,1',
-            'colors' => 'nullable|array',
-            'colors.*' => 'exists:colors,id',
-            'sizes' => 'nullable|array',
-            'sizes.*' => 'exists:sizes,id',
+            'status'      => 'required|in:0,1',
+            'colors'      => 'nullable|array',
+            'colors.*'    => 'exists:colors,id',
+            'sizes'       => 'nullable|array',
+            'sizes.*'     => 'exists:sizes,id',
+            'category_id' => 'nullable|exists:categories,id',
         ];
 
         if ($this->isMethod('POST')) {
             $rules['slug'] = 'required|string|max:255|unique:products,slug';
-            $rules['first_image'] = 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048';
-            $rules['second_image'] = 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048';
-            $rules['third_image'] = 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048';
+
+            $rules['first_image']  = 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048|dimensions:min_width=800,min_height=800,ratio=1/1';
+            $rules['second_image'] = 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048|dimensions:min_width=800,min_height=800,ratio=1/1';
+            $rules['third_image']  = 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048|dimensions:min_width=800,min_height=800,ratio=1/1';
         } else {
             $rules['slug'] = 'required|string|max:255|unique:products,slug,' . $this->product->id;
-            $rules['first_image'] = 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048';
-            $rules['second_image'] = 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048';
-            $rules['third_image'] = 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048';
+
+            $rules['first_image']  = 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048|dimensions:min_width=800,min_height=800,ratio=1/1';
+            $rules['second_image'] = 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048|dimensions:min_width=800,min_height=800,ratio=1/1';
+            $rules['third_image']  = 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048|dimensions:min_width=800,min_height=800,ratio=1/1';
         }
 
         return $rules;
+    }
+
+    public function messages()
+    {
+        return [
+            'first_image.dimensions'  => 'First image must be square (same width and height) and at least 800×800 pixels.',
+            'second_image.dimensions' => 'Second image must be square and at least 800×800 pixels.',
+            'third_image.dimensions'  => 'Third image must be square and at least 800×800 pixels.',
+        ];
     }
 }
