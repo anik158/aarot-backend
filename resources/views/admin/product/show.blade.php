@@ -37,6 +37,12 @@
 
             <!-- Product Info -->
             <div class="lg:col-span-2 space-y-6">
+                <div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Category</p>
+                    <p class="text-lg font-semibold text-gray-800 dark:text-white">
+                        {{ $product->category ? $product->category->name : 'No Category' }}
+                    </p>
+                </div>
                 <!-- Status and Price -->
                 <div class="flex flex-wrap items-center justify-between gap-4 p-4 rounded-lg bg-blue-50 dark:bg-gray-700 border border-blue-100 dark:border-gray-600">
                     <div>

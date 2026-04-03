@@ -29,7 +29,7 @@ class CategoryController extends Controller
             ->paginate(20);
 
         $categories->appends(['search' => $search]);
-        return view('admin.categories.index', compact('categories'));
+        return view('admin.categories.index', compact('categories','search'));
     }
 
     public function create()
