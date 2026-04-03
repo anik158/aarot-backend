@@ -1,0 +1,22 @@
+<?php
+
+namespace App\Models;
+
+use App\Models\Admin\Product;
+use Illuminate\Database\Eloquent\Model;
+
+class Category extends Model
+{
+    protected $fillable = [
+        'name',
+        'slug',
+        'description',
+        'image',
+        'status'
+    ];
+
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
+}

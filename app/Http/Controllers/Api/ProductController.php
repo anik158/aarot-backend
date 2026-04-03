@@ -19,6 +19,13 @@ class ProductController extends Controller
         $productQuery = Product::with([ 'reviews']);
 
 
+        if($request->has('limit'))
+        {
+            $productQuery->limit($request->limit);
+
+        }
+
+
 //        Filter by color
         if($request->has('color') && $request->color !='')
         {

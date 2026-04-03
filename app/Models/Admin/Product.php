@@ -2,6 +2,7 @@
 
 namespace App\Models\Admin;
 
+use App\Models\Category;
 use App\Models\User\Order;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -35,5 +36,10 @@ class Product extends Model
 
     public function getRouteKeyName() {
         return 'slug';
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
     }
 }
