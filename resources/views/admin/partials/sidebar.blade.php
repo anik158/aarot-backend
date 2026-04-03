@@ -48,6 +48,9 @@
                 <a href="{{route('admin.categories.index')}}" class="flex items-center px-6 py-2 pl-12 text-gray-400 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100">
                     <span>Category</span>
                 </a>
+                <a href="{{route('admin.reviews.index')}}" class="flex items-center px-6 py-2 pl-12 text-gray-400 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100">
+                    <span>Reviews</span>
+                </a>
                 <!-- Add more sub-items here -->
             </div>
         </div>

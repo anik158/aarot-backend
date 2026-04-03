@@ -84,7 +84,7 @@ class ProductController extends Controller
     public function show($id)
     {
         try{
-            $product = Product::with(['colors', 'sizes', 'reviews.users'])
+            $product = Product::with(['colors', 'sizes', 'reviews.user'])
                 ->where('id', $id)
                 ->firstOrFail();
             if($product)

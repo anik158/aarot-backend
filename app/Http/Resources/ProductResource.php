@@ -40,8 +40,11 @@ class ProductResource extends JsonResource
             'reviews' => $this->reviews->map(function ($review) {
                 return [
                     'id' => $review->id,
-                    'user' => $review->users->name ?? 'Anonymous',
-                    'comment' => $review->comment,
+                    'user' => [
+                        'name' => $review->user->name ?? 'Anonymous'
+                    ],
+                    'title' => $review->title,
+                    'body' => $review->body,
                     'rating' => $review->rating,
                     'created_at' => $review->created_at->diffForHumans(),
                 ];

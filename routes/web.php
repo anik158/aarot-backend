@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\ReviewController;
 use App\Http\Controllers\Admin\StripeWebhookController;
 use Illuminate\Support\Facades\Route;
 
@@ -25,6 +26,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.','middleware' => ['admin']],f
     Route::resource('coupons', CouponController::class);
     Route::resource('products', ProductController::class);
     Route::resource('categories',CategoryController::class);
+    Route::patch('reviews/{id}/status', [ReviewController::class, 'updateStatus'])->name('reviews.status');
+    Route::resource('reviews', ReviewController::class);
 });
 
 Route::post('/stripe/webhook', [StripeWebhookController::class, 'handle']);

@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\FavoriteController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\ReviewController;
 use App\Http\Controllers\Api\SizeController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
@@ -31,6 +32,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/orders/{orderNumber}', [OrderController::class, 'showByOrderNumber']);
     Route::post('/favorites/{productId}', [FavoriteController::class, 'toggle']);
     Route::get('/favorites/{productId}/status', [FavoriteController::class, 'checkStatus']);
+    Route::post('/reviews', [ReviewController::class, 'store']);
     Route::post('/payment/stripe/session', [PaymentController::class, 'createStripeSession']);});
 
 Route::prefix('cart')->group(function () {

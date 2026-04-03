@@ -31,7 +31,7 @@ class Product extends Model
     }
 
     public function reviews(): hasMany {
-        return $this->hasMany(Review::class)->with('users')->where('approved', 1)->latest();
+        return $this->hasMany(Review::class)->with('user')->where('approved', Review::APPROVED)->latest();
     }
 
     public function getRouteKeyName() {

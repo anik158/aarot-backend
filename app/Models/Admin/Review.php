@@ -11,6 +11,10 @@ class Review extends Model
 {
     protected  $guarded = ['id'];
 
+    const APPROVED = 1;
+    const REJECTED = 2;
+
+
     public function user(): BelongsTo {
         return $this->belongsTo(User::class);
     }

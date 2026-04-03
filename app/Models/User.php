@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Admin\Review;
 use App\Models\User\Order;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -55,5 +56,9 @@ class User extends Authenticatable
         }else {
             return 'https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png';
         }
+    }
+
+    public function reviews(): HasMany {
+        return $this->hasMany(Review::class);
     }
 }
