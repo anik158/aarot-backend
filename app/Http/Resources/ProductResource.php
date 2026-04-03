@@ -46,7 +46,7 @@ class ProductResource extends JsonResource
                     'title' => $review->title,
                     'body' => $review->body,
                     'rating' => $review->rating,
-                    'created_at' => $review->created_at->diffForHumans(),
+                    'created_at' => $review->created_at,
                 ];
             }),
             'created_at' => $this->created_at->toDateTimeString(),
