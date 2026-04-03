@@ -14,6 +14,18 @@ class UserResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'email' => $this->email,
+            'phone' => $this->phone,
+            'address' => $this->address,
+            'city' => $this->city,
+            'country' => $this->country,
+            'zip_code' => $this->zip_code,
+            'profile_image' => $this->profile_image ? asset('storage/images/users/'.$this->profile_image) : 'https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png',
+            'profile_completed' => $this->profile_completed,
+            'created_at' => $this->created_at->toDateTimeString(),
+        ];
     }
 }

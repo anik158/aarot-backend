@@ -33,6 +33,9 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/favorites/{productId}', [FavoriteController::class, 'toggle']);
     Route::get('/favorites/{productId}/status', [FavoriteController::class, 'checkStatus']);
     Route::post('/reviews', [ReviewController::class, 'store']);
+    Route::get('/my-reviews', [ReviewController::class, 'myReviews']);
+    Route::get('/profile', [UserController::class, 'profile']);
+    Route::post('/profile/update', [UserController::class, 'updateProfile']);
     Route::post('/payment/stripe/session', [PaymentController::class, 'createStripeSession']);});
 
 Route::prefix('cart')->group(function () {

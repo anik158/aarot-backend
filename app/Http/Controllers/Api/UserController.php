@@ -67,4 +67,47 @@ class UserController extends Controller
         $request->user()->currentAccessToken()->delete();
         return $this->success(null, 'User has been logged out');
     }
+
+    public function profile(Request $request) {
+        return $this->success(new UserResource($request->user()), 'Profile fetched');
+    }
+
+    public function updateProfile(Request $request) {
+        $user = $request->user();
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,'.$user->id,
+            'password' => 'nullable|string|min:8|confirmed',
+            'phone' => 'nullable|string|max:20',
+            'address' => 'nullable|string|max:255',
+            'city' => 'nullable|string|max:255',
+            'zip_code' => 'nullable|string|max:20',
+            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+        ]);
+
+        if ($request->hasFile('profile_image')) {
+            if ($user->profile_image) {
+                $oldPath = public_path('storage/images/users/'.$user->profile_image);
+                if (file_exists($oldPath)) { @unlink($oldPath); }
+            }
+            $imageName = time().'.'.$request->profile_image->extension();  
+            $request->profile_image->move(public_path('storage/images/users/'), $imageName);
+            $user->profile_image = $imageName;
+        }
+
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->phone = $request->phone;
+        $user->address = $request->address;
+        $user->city = $request->city;
+        $user->zip_code = $request->zip_code;
+        
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->password);
+        }
+
+        $user->save();
+
+        return $this->success(new UserResource($user), 'Profile updated successfully');
+    }
 }

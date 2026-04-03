@@ -29,4 +29,21 @@ class ReviewController extends Controller
 
         return $this->success($review, 'Review submitted successfully');
     }
+
+    public function myReviews(\Illuminate\Http\Request $request)
+    {
+        $reviews = Review::with('product')
+            ->where('user_id', $request->user()->id)
+            ->latest()
+            ->paginate(10);
+            
+        $reviews->getCollection()->transform(function($review) {
+            if ($review->product) {
+                $review->product->first_image = asset($review->product->first_image);
+            }
+            return $review;
+        });
+        
+        return $this->success($reviews, 'Your reviews fetched');
+    }
 }
