@@ -14,8 +14,15 @@ class AdminController extends Controller
         $yesterDayOrders = Order::whereDay('created_at', Carbon::yesterday())->get();
         $monthOrders = Order::whereMonth('created_at', Carbon::now()->month)->get();
         $yearOrder = Order::whereYear('created_at', Carbon::now()->year)->get();
+        
+        $totalRevenue = Order::where('payment_status', 'paid')->sum('total');
+        $totalCustomers = \App\Models\User::count();
+        $recentOrders = Order::with('user')->latest()->take(8)->get();
 
-        return view('admin.index', compact('todayOrders', 'yesterDayOrders', 'monthOrders', 'yearOrder'));
+        return view('admin.index', compact(
+            'todayOrders', 'yesterDayOrders', 'monthOrders', 'yearOrder',
+            'totalRevenue', 'totalCustomers', 'recentOrders'
+        ));
     }
 
     public function login() {
