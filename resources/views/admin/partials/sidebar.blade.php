@@ -1,109 +1,73 @@
 <!-- Sidebar overlay (mobile only) -->
-<div id="sidebarOverlay" class="fixed inset-0 z-20 transition-opacity bg-black opacity-50 lg:hidden hidden"></div>
+<div id="sidebarOverlay" class="fixed inset-0 z-20 transition-opacity bg-black/50 lg:hidden hidden"></div>
 
 <!-- Sidebar -->
-<div id="sidebar" class="fixed inset-y-0 left-0 z-30 w-64 overflow-y-auto transition duration-300 transform bg-gray-900 -translate-x-full lg:translate-x-0 lg:static lg:inset-0">
-    <div class="flex items-center justify-center mt-8">
-        <div class="flex items-center">
-            <svg class="w-12 h-12" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M364.61 390.213C304.625 450.196 207.37 450.196 147.386 390.213C117.394 360.22 102.398 320.911 102.398 281.6C102.398 242.291 117.394 202.981 147.386 172.989C147.386 230.4 153.6 281.6 230.4 307.2C230.4 256 256 102.4 294.4 76.7999C320 128 334.618 142.997 364.608 172.989C394.601 202.981 409.597 242.291 409.597 281.6C409.597 320.911 394.601 360.22 364.61 390.213Z" fill="#4C51BF" stroke="#4C51BF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M201.694 387.105C231.686 417.098 280.312 417.098 310.305 387.105C325.301 372.109 332.8 352.456 332.8 332.8C332.8 313.144 325.301 293.491 310.305 278.495C295.309 263.498 288 256 275.2 230.4C256 243.2 243.201 320 243.201 345.6C201.694 345.6 179.2 332.8 179.2 332.8C179.2 352.456 186.698 372.109 201.694 387.105Z" fill="white"/>
-            </svg>
-            <span class="mx-2 text-2xl font-semibold text-white">Dashboard</span>
+<div id="sidebar" class="fixed inset-y-0 left-0 z-30 w-72 overflow-y-auto transition-all duration-300 transform bg-slate-950 -translate-x-full lg:translate-x-0 lg:static lg:inset-0 border-r border-white/5">
+    <div class="flex flex-col h-full bg-gradient-to-b from-slate-900 to-slate-950">
+        <div class="flex items-center justify-start px-8 py-10">
+            <a href="{{route('admin.index')}}" class="flex items-center gap-3 group transition-transform hover:scale-105">
+                <img src="https://www.svgrepo.com/show/499831/target.svg" alt="aarot" class="h-10 w-auto" />
+                <span class="text-3xl font-black tracking-tighter text-white">aarot</span>
+            </a>
         </div>
-    </div>
 
-    <nav class="mt-10">
-        <!-- Regular item -->
-        <a class="flex items-center px-6 py-2 mt-4 text-gray-100 bg-gray-700 bg-opacity-25" href="/">
-            <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" />
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" />
-            </svg>
-            <span class="mx-3">Dashboard</span>
-        </a>
-
-        <!-- Collapsible parent item example -->
-        <div class="mt-4">
-            <button onclick="this.parentElement.querySelector('.submenu').classList.toggle('open'); this.querySelector('svg').classList.toggle('rotate-90')"
-                    class="w-full flex items-center px-6 py-2 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100 cursor-pointer">
-                <svg class="w-6 h-6 transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        <nav class="flex-1 px-4 space-y-2">
+            <p class="px-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 mb-2">Main Menu</p>
+            
+            <a class="flex items-center gap-3 px-4 py-4 text-sm font-bold rounded-2xl transition-all duration-300 {{request()->routeIs('admin.index') ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 shadow-[0_0_20px_rgba(16,185,129,0.1)]' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white'}}" 
+               href="{{route('admin.index')}}">
+                <svg class="w-5 h-5 opacity-80" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" />
                 </svg>
-                <span class="mx-3">Product Config</span>
-            </button>
-            <div class="submenu max-h-0 overflow-hidden transition-all duration-300">
-                <a href="{{route('admin.colors.index')}}" class="flex items-center px-6 py-2 pl-12 text-gray-400 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100">
-                    <span>Color</span>
-                </a>
-                <a href="{{route('admin.sizes.index')}}" class="flex items-center px-6 py-2 pl-12 text-gray-400 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100">
-                    <span>Size</span>
-                </a>
-                <a href="{{route('admin.coupons.index')}}" class="flex items-center px-6 py-2 pl-12 text-gray-400 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100">
-                    <span>Coupon</span>
-                </a>
-                <a href="{{route('admin.products.index')}}" class="flex items-center px-6 py-2 pl-12 text-gray-400 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100">
-                    <span>Product</span>
-                </a>
-                <a href="{{route('admin.categories.index')}}" class="flex items-center px-6 py-2 pl-12 text-gray-400 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100">
-                    <span>Category</span>
-                </a>
-                <a href="{{route('admin.reviews.index')}}" class="flex items-center px-6 py-2 pl-12 text-gray-400 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100">
-                    <span>Reviews</span>
-                </a>
-                <!-- Add more sub-items here -->
+                <span>Dashboard</span>
+            </a>
+
+            <div class="pt-4">
+                <p class="px-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 mb-2">Inventory Control</p>
+                
+                <div class="space-y-1">
+                    <button onclick="this.nextElementSibling.classList.toggle('max-h-0'); this.nextElementSibling.classList.toggle('max-h-[1000px]'); this.querySelector('.arrow').classList.toggle('rotate-180')"
+                            class="w-full flex items-center justify-between px-4 py-4 text-sm font-bold text-slate-400 rounded-2xl transition-all duration-300 hover:bg-slate-800/50 hover:text-white group">
+                        <div class="flex items-center gap-3">
+                            <svg class="w-5 h-5 opacity-80" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                            <span>E-Commerce Config</span>
+                        </div>
+                        <svg class="arrow w-4 h-4 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                    </button>
+                    
+                    <div class="max-h-0 overflow-hidden transition-all duration-500 ease-in-out pl-10 space-y-1">
+                        @php $subitems = [
+                            ['route' => 'admin.categories.index', 'name' => 'Categories'],
+                            ['route' => 'admin.products.index', 'name' => 'Products'],
+                            ['route' => 'admin.colors.index', 'name' => 'Colors'],
+                            ['route' => 'admin.sizes.index', 'name' => 'Sizes'],
+                            ['route' => 'admin.coupons.index', 'name' => 'Coupons'],
+                            ['route' => 'admin.reviews.index', 'name' => 'Customer Reviews'],
+                        ]; @endphp
+
+                        @foreach($subitems as $item)
+                        <a href="{{route($item['route'])}}" 
+                           class="flex items-center py-3 text-[13px] font-medium transition-colors {{request()->routeIs($item['route']) ? 'text-emerald-500' : 'text-slate-500 hover:text-white'}}">
+                           <span class="w-1.5 h-1.5 rounded-full bg-slate-700 mr-3 {{request()->routeIs($item['route']) ? 'bg-emerald-500 ring-4 ring-emerald-500/20' : ''}}"></span>
+                           {{$item['name']}}
+                        </a>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="p-6 mt-auto">
+            <div class="bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-3xl p-5 shadow-2xl shadow-emerald-500/20">
+                <p class="text-[10px] font-black tracking-widest text-emerald-100 uppercase mb-1">Status</p>
+                <div class="flex items-center justify-between">
+                    <span class="text-white font-bold text-sm">System Online</span>
+                    <div class="w-2 h-2 bg-white rounded-full animate-pulse shadow-[0_0_10px_#fff]"></div>
+                </div>
             </div>
         </div>
-
-        <!-- Another regular item -->
-{{--        <a class="flex items-center px-6 py-2 mt-4 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100" href="/ui-elements">--}}
-{{--            <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">--}}
-{{--                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14v6m-3-3h6M6 10h2a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2zm10 0h2a2 2 0 002-2V6a2 2 0 00-2-2h-2a2 2 0 00-2 2v2a2 2 0 002 2zM6 20h2a2 2 0 002-2v-2a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2z" />--}}
-{{--            </svg>--}}
-{{--            <span class="mx-3">UI Elements</span>--}}
-{{--        </a>--}}
-
-        <!-- You can duplicate the collapsible block for more parents, e.g., "Settings", "Users", etc. -->
-        <!-- Example: Another collapsible -->
-{{--        <div class="mt-4">--}}
-{{--            <button onclick="this.parentElement.querySelector('.submenu').classList.toggle('open'); this.querySelector('svg').classList.toggle('rotate-90')"--}}
-{{--                    class="w-full flex items-center px-6 py-2 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100 cursor-pointer">--}}
-{{--                <svg class="w-6 h-6 transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">--}}
-{{--                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />--}}
-{{--                </svg>--}}
-{{--                <span class="mx-3">Settings</span>--}}
-{{--            </button>--}}
-{{--            <div class="submenu max-h-0 overflow-hidden transition-all duration-300">--}}
-{{--                <a href="/profile" class="flex items-center px-6 py-2 pl-12 text-gray-400 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100">--}}
-{{--                    <span>Profile</span>--}}
-{{--                </a>--}}
-{{--                <a href="/account" class="flex items-center px-6 py-2 pl-12 text-gray-400 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100">--}}
-{{--                    <span>Account</span>--}}
-{{--                </a>--}}
-{{--            </div>--}}
-{{--        </div>--}}
-
-
-        <!-- Remaining original items -->
-{{--        <a class="flex items-center px-6 py-2 mt-4 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100" href="/tables">--}}
-{{--            <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">--}}
-{{--                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />--}}
-{{--            </svg>--}}
-{{--            <span class="mx-3">Tables</span>--}}
-{{--        </a>--}}
-
-{{--        <a class="flex items-center px-6 py-2 mt-4 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100" href="/forms">--}}
-{{--            <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">--}}
-{{--                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />--}}
-{{--            </svg>--}}
-{{--            <span class="mx-3">Forms</span>--}}
-{{--        </a>--}}
-    </nav>
+    </div>
 </div>
-
-<!-- Add this CSS to your app.css (or a style tag) for the open state -->
-<style>
-    .submenu.open {
-        max-height: 500px; /* Adjust if you have many items; or use a large value like 999px */
-    }
-</style>

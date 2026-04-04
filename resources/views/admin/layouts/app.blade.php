@@ -4,11 +4,17 @@
     <meta charset="utf-8">
     <title>Admin Dashboard</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'DM+Sans', sans-serif; }
+    </style>
     <script src="https://kit.fontawesome.com/e727123d3e.js" crossorigin="anonymous"></script>
     <!-- Summernote Lite CSS -->
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.css" rel="stylesheet">
 </head>
-<body class="flex h-screen bg-gray-200 font-roboto">
+<body class="flex h-screen bg-slate-100 font-sans">
 <!-- Sidebar Overlay (for mobile) -->
 <div id="sidebarOverlay" class="fixed inset-0 z-40 bg-black opacity-50 lg:hidden hidden"></div>
 
@@ -21,7 +27,7 @@
     @include('admin.partials.header')
 
     <!-- Main content -->
-    <main class="flex-1 overflow-x-hidden overflow-y-auto bg-[#4a5764]">
+    <main class="flex-1 overflow-x-hidden overflow-y-auto bg-slate-50/50">
         <div class="container mx-auto px-6 py-8">
             @yield('content')
         </div>
