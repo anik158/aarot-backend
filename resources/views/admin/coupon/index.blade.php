@@ -58,15 +58,23 @@
                                 </th>
                                 <th scope="col"
                                     class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                    Coupon Name
+                                    Code
                                 </th>
                                 <th scope="col"
                                     class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                    Discount (%)
+                                    Type
                                 </th>
                                 <th scope="col"
                                     class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                    Valid Until
+                                    Value
+                                </th>
+                                <th scope="col"
+                                    class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                    Status
+                                </th>
+                                <th scope="col"
+                                    class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                    Expires At
                                 </th>
                                 <th scope="col" class="relative py-3.5 px-4">
                                     <span class="sr-only">Actions</span>
@@ -79,14 +87,24 @@
                                     <td class="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
                                         {{ $coupons->firstItem() + $loop->index }}
                                     </td>
-                                    <td class="px-4 py-4 text-sm text-gray-700 dark:text-gray-200 whitespace-nowrap">
-                                        {{ $item->name }}
+                                    <td class="px-4 py-4 text-sm font-bold text-gray-900 dark:text-white whitespace-nowrap">
+                                        {{ $item->code }}
+                                    </td>
+                                    <td class="px-4 py-4 text-sm text-gray-700 dark:text-gray-200 whitespace-nowrap capitalize">
+                                        {{ $item->type }}
                                     </td>
                                     <td class="px-4 py-4 text-sm text-gray-700 dark:text-gray-200 whitespace-nowrap">
-                                        {{ $item->discount }}%
+                                        {{ $item->type == 'percentage' ? $item->value.'%' : '$'.$item->value }}
+                                    </td>
+                                    <td class="px-4 py-4 text-sm whitespace-nowrap">
+                                        @if($item->is_active == '1')
+                                            <span class="px-2 py-1 text-xs font-semibold text-green-800 bg-green-100 rounded-full">Active</span>
+                                        @else
+                                            <span class="px-2 py-1 text-xs font-semibold text-red-800 bg-red-100 rounded-full">Inactive</span>
+                                        @endif
                                     </td>
                                     <td class="px-4 py-4 text-sm text-gray-700 dark:text-gray-200 whitespace-nowrap">
-                                        {{ $item->valid_until }}
+                                        {{ $item->expires_at ? \Carbon\Carbon::parse($item->expires_at)->format('M d, Y') : 'Never' }}
                                     </td>
                                     <td class="px-4 py-4 text-sm whitespace-nowrap text-right">
                                         <div class="flex items-center justify-end gap-x-4">

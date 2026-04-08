@@ -24,9 +24,9 @@ class CouponController extends Controller
     {
         $search = $request->get('search', '');
 
-        $coupons = Coupon::select(['id', 'name', 'discount', 'valid_until'])
+        $coupons = Coupon::select(['id', 'code', 'type', 'value', 'expires_at', 'is_active'])
             ->when($search, function ($query, $search) {
-                return $query->where('name', 'like', "%{$search}%");
+                return $query->where('code', 'like', "%{$search}%");
             })
             ->paginate(20);
 

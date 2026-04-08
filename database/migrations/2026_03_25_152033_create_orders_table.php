@@ -18,7 +18,7 @@ return new class extends Migration
 
             $table->decimal('subtotal', 10, 4)->default(0);
             $table->decimal('shipping_cost', 10, 4)->default(0);
-            $table->decimal('coupon_id')->nullable()->constrained();
+            $table->foreignId('coupon_id')->nullable()->constrained()->onDelete('set null');
             $table->decimal('discount_amount', 10, 4)->default(0);
             $table->decimal('total', 10, 4)->default(0);
 

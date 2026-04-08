@@ -27,6 +27,7 @@ class CheckoutRequest extends FormRequest
             'address'               => 'required|string|min:10',
             'city'                  => 'required|string|max:100',
             'payment_method' => 'required|in:cod,stripe',
+            'coupon_id'      => 'nullable|integer|exists:coupons,id',
 
             'cart_items'            => 'required|array|min:1',
             'cart_items.*.productId'=> 'required|integer|exists:products,id',

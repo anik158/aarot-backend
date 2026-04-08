@@ -23,42 +23,79 @@
 
             <div class="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
                 <div>
-                    <label class="text-gray-700 dark:text-gray-200" for="name">Name</label>
+                    <label class="text-gray-700 dark:text-gray-200" for="code">Coupon Code</label>
                     <input
-                        id="name"
-                        name="name"
+                        id="code"
+                        name="code"
                         type="text"
-                        value="{{ old('name', $edit ? $coupon->name : '') }}"
+                        placeholder="E.g., SAVE20"
+                        value="{{ old('code', $edit ? $coupon->code : '') }}"
                         class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring"
                     >
                 </div>
 
                 <div>
-                    <label class="text-gray-700 dark:text-gray-200" for="discount">Discount (%)</label>
+                    <label class="text-gray-700 dark:text-gray-200" for="type">Coupon Type</label>
+                    <select
+                        id="type"
+                        name="type"
+                        class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring"
+                    >
+                        <option value="fixed" {{ old('type', $edit ? $coupon->type : '') == 'fixed' ? 'selected' : '' }}>Fixed Amount</option>
+                        <option value="percentage" {{ old('type', $edit ? $coupon->type : '') == 'percentage' ? 'selected' : '' }}>Percentage (%)</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="text-gray-700 dark:text-gray-200" for="value">Discount Value</label>
                     <input
-                        id="discount"
-                        name="discount"
+                        id="value"
+                        name="value"
                         type="number"
-                        value="{{ old('discount', $edit ? $coupon->discount : '') }}"
+                        step="0.01"
+                        value="{{ old('value', $edit ? $coupon->value : '') }}"
                         class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring"
                     >
                 </div>
 
                 <div>
-                    <label class="text-gray-700 dark:text-gray-200" for="valid_until">Valid Until</label>
+                    <label class="text-gray-700 dark:text-gray-200" for="max_usage">Max Usage Limit</label>
                     <input
-                        id="valid_until"
-                        name="valid_until"
-                        type="date"
-                        value="{{ old('valid_until', $edit ? $coupon->valid_until : '') }}"
+                        id="max_usage"
+                        name="max_usage"
+                        type="number"
+                        value="{{ old('max_usage', $edit ? $coupon->max_usage : '') }}"
                         class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring"
                     >
+                </div>
+
+                <div>
+                    <label class="text-gray-700 dark:text-gray-200" for="expires_at">Expires At</label>
+                    <input
+                        id="expires_at"
+                        name="expires_at"
+                        type="date"
+                        value="{{ old('expires_at', $edit ? ($coupon->expires_at ? \Carbon\Carbon::parse($coupon->expires_at)->format('Y-m-d') : '') : '') }}"
+                        class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring"
+                    >
+                </div>
+
+                <div>
+                    <label class="text-gray-700 dark:text-gray-200" for="is_active">Status</label>
+                    <select
+                        id="is_active"
+                        name="is_active"
+                        class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring"
+                    >
+                        <option value="1" {{ old('is_active', $edit ? $coupon->is_active : '1') == '1' ? 'selected' : '' }}>Active</option>
+                        <option value="0" {{ old('is_active', $edit ? $coupon->is_active : '1') == '0' ? 'selected' : '' }}>Inactive</option>
+                    </select>
                 </div>
             </div>
 
             <div class="flex justify-end mt-6">
                 <button type="submit" class="px-8 py-2.5 leading-5 text-white transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-600 dark:hover:bg-gray-700 dark:bg-gray-900 focus:outline-none">
-                    Save
+                    Save Coupon
                 </button>
             </div>
         </form>
@@ -70,35 +107,25 @@
         $(document).ready(function () {
             $("#couponForm").validate({
                 rules: {
-                    name: {
+                    code: {
                         required: true,
                         minlength: 2
                     },
-                    discount: {
+                    type: {
+                        required: true
+                    },
+                    value: {
                         required: true,
                         number: true,
-                        min: 1,
-                        max: 100
+                        min: 0.01
                     },
-                    valid_until: {
+                    max_usage: {
                         required: true,
-                        date: true
-                    }
-                },
-                messages: {
-                    name: {
-                        required: "Please enter a coupon name",
-                        minlength: "Coupon name must be at least 2 characters"
+                        number: true,
+                        min: 1
                     },
-                    discount: {
-                        required: "Please enter a discount percentage",
-                        number: "Please enter a valid number",
-                        min: "Discount must be at least 1%",
-                        max: "Discount cannot exceed 100%"
-                    },
-                    valid_until: {
-                        required: "Please select a validity date",
-                        date: "Please enter a valid date"
+                    is_active: {
+                        required: true
                     }
                 },
                 submitHandler: function(form) {
@@ -117,16 +144,15 @@
                                 then(() => {
                                     window.location.href = "{{ route('admin.coupons.index') }}";
                                 });
-
                             }
-
                         },
                         error: function(xhr) {
-                            console.log(xhr.responseText)
+                            let msg = "Something went wrong!";
+                            if(xhr.responseJSON && xhr.responseJSON.message) msg = xhr.responseJSON.message;
                             Swal.fire({
                                 icon: "error",
                                 title: "Oops...",
-                                text: "Something went wrong!",
+                                text: msg,
                             });
                         }
                     });

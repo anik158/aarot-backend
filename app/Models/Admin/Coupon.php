@@ -11,12 +11,16 @@ class Coupon extends Model
     protected $guarded = ['id'];
 
 
-    public function setNameAttribute(string $name): void {
-        $this->attributes['name'] = Str::upper($name);
+    public function setCodeAttribute(string $code): void {
+        $this->attributes['code'] = Str::upper($code);
     }
 
     public function isValid(): bool
     {
-        return ($this->valid_until > Carbon::now());
+        if ($this->is_active !== '1') return false;
+        if ($this->used_count >= (int)$this->max_usage) return false;
+        if ($this->expires_at && $this->expires_at < now()) return false;
+        
+        return true;
     }
 }

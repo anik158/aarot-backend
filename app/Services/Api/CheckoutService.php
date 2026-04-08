@@ -32,12 +32,33 @@ class CheckoutService
                 $subTotal += $cartItem['price'] * $cartItem['qty'];
             }
 
+            $discountAmount = 0;
+            $couponId = $validatedData['coupon_id'] ?? null;
+
+            if ($couponId) {
+                $coupon = \App\Models\Admin\Coupon::find($couponId);
+                if ($coupon && $coupon->isValid()) {
+                    if ($coupon->type === 'fixed') {
+                        $discountAmount = (float)$coupon->value;
+                    } else {
+                        $discountAmount = $subTotal * ($coupon->value / 100);
+                    }
+
+                    // Increment the usage count
+                    $coupon->increment('used_count');
+                }
+            }
+
+            $total = ($subTotal - $discountAmount);
+            if ($total < 0) $total = 0;
+
             $order = Order::create([
                 'user_id'          => $user->id,
                 'subtotal'         => $subTotal,
                 'shipping_cost'    => 0,
-                'discount_amount'  => 0,
-                'total'            => $subTotal,
+                'coupon_id'        => $couponId,
+                'discount_amount'  => $discountAmount,
+                'total'            => $total,
                 'status'           => 'pending',
                 'payment_status'   => $paymentMethod === 'cod' ? 'pending' : 'unpaid',
                 'payment_method'   => $paymentMethod,

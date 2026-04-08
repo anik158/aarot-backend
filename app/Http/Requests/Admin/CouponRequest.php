@@ -22,9 +22,12 @@ class CouponRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|min:2|max:255|unique:coupons,name' . ($this->coupon ? ',' . $this->coupon->id : ''),
-            'discount' => 'required|integer|min:1|max:100',
-            'valid_until' => 'required|date',
+            'code' => 'required|string|min:2|max:255|unique:coupons,code' . ($this->coupon ? ',' . $this->coupon->id : ''),
+            'type' => 'required|in:fixed,percentage',
+            'value' => 'required|numeric|min:0.01',
+            'max_usage' => 'required|integer|min:1',
+            'expires_at' => 'nullable|date',
+            'is_active' => 'required|in:1,0',
         ];
     }
 }
