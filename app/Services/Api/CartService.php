@@ -11,18 +11,16 @@ use Illuminate\Support\Str;
 
 class CartService
 {
-    protected $user;
-
-    public function __construct()
+    private function getCurrentUser()
     {
-        $this->user = auth('api')->user();
+        return auth('api')->user();
     }
-
 
     private function getCartKey($guestToken = null)
     {
-        if ($this->user) {
-            return "cart:user:{$this->user->id}";
+        $user = $this->getCurrentUser();
+        if ($user) {
+            return "cart:user:{$user->id}";
         }
 
         // Guest
@@ -55,9 +53,10 @@ class CartService
             $sizeName = $size ? $size->name : null;
         }
 
-        if ($this->user) {
+        $user = $this->getCurrentUser();
+        if ($user) {
             // === Logged-in User → Database ===
-            $cart = Cart::firstOrCreate(['user_id' => $this->user->id]);
+            $cart = Cart::firstOrCreate(['user_id' => $user->id]);
 
             $cartItem = CartItem::where([
                 'cart_id'    => $cart->id,
@@ -124,9 +123,10 @@ class CartService
 
     public function getCart($guestToken = null)
     {
-        if ($this->user) {
+        $user = $this->getCurrentUser();
+        if ($user) {
             $cart = Cart::with(['items.product', 'items.color', 'items.size'])
-                ->where('user_id', $this->user->id)
+                ->where('user_id', $user->id)
                 ->first();
 
             if (!$cart) return [];
@@ -162,8 +162,9 @@ class CartService
 
     public function clearCart($guestToken = null)
     {
-        if ($this->user) {
-            CartItem::whereHas('cart', fn($q) => $q->where('user_id', $this->user->id))->delete();
+        $user = $this->getCurrentUser();
+        if ($user) {
+            CartItem::whereHas('cart', fn($q) => $q->where('user_id', $user->id))->delete();
         } else {
             $key = $this->getCartKey($guestToken);
             Redis::del($key);
@@ -172,8 +173,9 @@ class CartService
 
     public function updateQuantity($productId, $colorId = null, $sizeId = null, $qty = 1, $guestToken = null)
     {
-        if ($this->user) {
-            $cart = Cart::where('user_id', $this->user->id)->first();
+        $user = $this->getCurrentUser();
+        if ($user) {
+            $cart = Cart::where('user_id', $user->id)->first();
             if (!$cart) return null;
 
             $cartItem = CartItem::where('cart_id', $cart->id)
@@ -220,11 +222,12 @@ class CartService
 
     public function mergeGuestCart($guestToken)
     {
-        if (!$this->user || !$guestToken) {
+        $user = $this->getCurrentUser();
+        if (!$user || !$guestToken) {
             return false;
         }
 
-        $key = $this->getCartKey($guestToken);
+        $key = "cart:guest:{$guestToken}";
         $guestCartData = Redis::get($key);
 
         if (!$guestCartData) {
@@ -233,7 +236,7 @@ class CartService
 
         $guestCart = json_decode($guestCartData, true);
 
-        $cart = Cart::firstOrCreate(['user_id' => $this->user->id]);
+        $cart = Cart::firstOrCreate(['user_id' => $user->id]);
 
         foreach ($guestCart as $item) {
             CartItem::updateOrCreate(
