@@ -25,19 +25,20 @@ class ProductResource extends JsonResource
             'second_image' => $this->second_image ? asset($this->second_image) : null,
             'third_image' => $this->third_image ? asset($this->third_image) : null,
             'status' => $this->status,
-            'colors' => $this->colors->map(function ($color) {
-                return [
-                    'id' => $color->id,
-                    'name' => $color->name,
-                ];
-            }),
-            'sizes' => $this->sizes->map(function ($size) {
-                return [
-                    'id' => $size->id,
-                    'name' => $size->name,
-                ];
-            }),
-            'reviews' => $this->reviews->map(function ($review) {
+            'attribute_values' => $this->whenLoaded('attributeValues', function () {
+                return $this->attributeValues->map(function ($val) {
+                    return [
+                        'id' => $val->id,
+                        'value' => $val->value,
+                        'attribute' => $val->attribute ? [
+                            'id' => $val->attribute->id,
+                            'name' => $val->attribute->name,
+                        ] : null
+                    ];
+                });
+            }, []),
+            'reviews' => $this->whenLoaded('reviews', function() {
+                return $this->reviews->map(function ($review) {
                 return [
                     'id' => $review->id,
                     'user' => [
@@ -48,7 +49,8 @@ class ProductResource extends JsonResource
                     'rating' => $review->rating,
                     'created_at' => $review->created_at,
                 ];
-            }),
+            });
+            }, []),
             'created_at' => $this->created_at->toDateTimeString(),
         ];
     }

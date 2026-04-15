@@ -25,8 +25,7 @@ class CartController extends Controller
 
             $cartItem = $this->cartService->addToCart(
                 $request->product_id,
-                $request->color_id,
-                $request->size_id,
+                $request->options ?? [],
                 $request->qty ?? 1,
                 $guestToken
             );
@@ -61,8 +60,7 @@ class CartController extends Controller
 
             $this->cartService->updateQuantity(
                 $request->product_id,
-                $request->color_id,
-                $request->size_id,
+                $request->options ?? [],
                 $request->qty ?? 1,
                 $guestToken
             );
@@ -81,8 +79,7 @@ class CartController extends Controller
 
             $this->cartService->removeItem(
                 $request->product_id,
-                $request->color_id,
-                $request->size_id,
+                $request->options ?? [],
                 $guestToken
             );
 

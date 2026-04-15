@@ -1,109 +1,115 @@
 @extends('admin.layouts.app')
 
 @section('content')
-    <section class="container px-4 mx-auto">
-        <div class="sm:flex sm:items-center sm:justify-between">
+    <div class="px-4 mx-auto max-w-5xl">
+        <div class="sm:flex sm:items-center sm:justify-between mb-10">
             <div>
                 <div class="flex items-center gap-x-3">
-                    <h2 class="text-lg font-medium text-gray-800 dark:text-white">Product Reviews</h2>
-                    <span class="px-3 py-1 text-xs text-blue-600 bg-blue-100 rounded-full dark:bg-gray-800 dark:text-blue-400">
-                    {{ $reviews->total() }} reviews
-                </span>
+                    <h2 class="text-4xl font-black text-slate-900 tracking-tighter">Market Sentiment</h2>
+                    <span class="px-3 py-1 text-xs font-bold text-emerald-700 bg-emerald-100 rounded-full border border-emerald-200">
+                        {{ $reviews->total() }} LOGS
+                    </span>
                 </div>
-                <p class="mt-1 text-sm text-gray-500 dark:text-gray-300">Manage and moderate product reviews from your customers.</p>
+                <p class="mt-2 text-sm font-bold text-slate-500 uppercase tracking-widest">Customer Feedback & Product Authentication</p>
             </div>
         </div>
 
         <div class="flex flex-col mt-6">
             <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                 <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-                    <div class="overflow-hidden border border-gray-200 dark:border-gray-700 md:rounded-lg">
-                        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                            <thead class="bg-gray-50 dark:bg-gray-800">
+                    <div class="overflow-hidden border border-slate-200 rounded-[2rem] bg-white shadow-2xl shadow-slate-200/50">
+                        <table class="min-w-full divide-y divide-slate-100">
+                            <thead class="bg-slate-50/50">
                             <tr>
-                                <th class="py-3.5 px-4 text-sm font-normal text-left text-gray-500 dark:text-gray-400">Date</th>
-                                <th class="px-4 py-3.5 text-sm font-normal text-left text-gray-500 dark:text-gray-400">Customer</th>
-                                <th class="px-4 py-3.5 text-sm font-normal text-left text-gray-500 dark:text-gray-400">Product</th>
-                                <th class="px-4 py-3.5 text-sm font-normal text-left text-gray-500 dark:text-gray-400">Review</th>
-                                <th class="px-4 py-3.5 text-sm font-normal text-left text-gray-500 dark:text-gray-400">Rating</th>
-                                <th class="px-4 py-3.5 text-sm font-normal text-left text-gray-500 dark:text-gray-400">Status</th>
-                                <th class="relative py-3.5 px-4"><span class="sr-only">Actions</span></th>
+                                <th class="py-5 px-6 text-xs font-black uppercase tracking-widest text-slate-400 text-left">Timestamp</th>
+                                <th class="px-6 py-5 text-xs font-black uppercase tracking-widest text-slate-400 text-left">User Profile</th>
+                                <th class="px-6 py-5 text-xs font-black uppercase tracking-widest text-slate-400 text-left">Target SKU</th>
+                                <th class="px-6 py-5 text-xs font-black uppercase tracking-widest text-slate-400 text-left">Narrative</th>
+                                <th class="px-6 py-5 text-xs font-black uppercase tracking-widest text-slate-400 text-center">Score</th>
+                                <th class="px-6 py-5 text-xs font-black uppercase tracking-widest text-slate-400 text-center">Metric</th>
+                                <th class="relative py-5 px-6"><span class="sr-only">Actions</span></th>
                             </tr>
                             </thead>
-                            <tbody class="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
+                            <tbody class="bg-white divide-y divide-slate-50">
                             @forelse($reviews as $review)
-                                <tr>
-                                    <td class="px-4 py-4 text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">
-                                        {{ $review->created_at }}
+                                <tr class="hover:bg-slate-50/30 transition-colors">
+                                    <td class="px-6 py-5 text-[11px] font-bold text-slate-400 whitespace-nowrap uppercase tracking-tighter">
+                                        {{ $review->created_at->format('M d, Y') }}<br>
+                                        <span class="text-[9px] opacity-70">{{ $review->created_at->format('H:i') }}</span>
                                     </td>
-                                    <td class="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
-                                        <div class="inline-flex items-center gap-x-3">
-                                            <span>{{ $review->user->name ?? 'Deleted User' }}</span>
+                                    <td class="px-6 py-5 text-sm whitespace-nowrap">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 font-black text-xs border border-slate-200 shadow-sm">
+                                                {{ substr($review->user->name ?? '?', 0, 1) }}
+                                            </div>
+                                            <span class="font-black text-slate-900 tracking-tight">{{ $review->user->name ?? 'System Ghost' }}</span>
                                         </div>
                                     </td>
-                                    <td class="px-4 py-4 text-sm text-gray-700 dark:text-gray-200 whitespace-nowrap">
-                                        <div class="flex items-center gap-x-2">
+                                    <td class="px-6 py-5 text-sm whitespace-nowrap">
+                                        <div class="flex items-center gap-x-3">
                                             @if($review->product)
-                                                <img class="object-cover w-8 h-8 rounded-full shadow-sm" src="{{ asset($review->product->first_image) }}" alt="{{ $review->product->name }}">
-                                                <span class="max-w-[150px] truncate font-medium text-white">{{ $review->product->name }}</span>
+                                                <div class="p-1 bg-slate-50 rounded-lg border border-slate-200 shadow-sm shrink-0">
+                                                    <img class="object-cover w-10 h-10 rounded-md" src="{{ asset($review->product->first_image) }}" alt="{{ $review->product->name }}">
+                                                </div>
+                                                <span class="max-w-[120px] truncate font-black text-slate-700 text-xs">{{ $review->product->name }}</span>
                                             @else
-                                                <span class="text-gray-400 italic">Deleted Product</span>
+                                                <span class="text-slate-300 italic text-xs font-bold">REDACTED SKU</span>
                                             @endif
                                         </div>
                                     </td>
-                                    <td class="px-4 py-4 text-sm text-gray-500 dark:text-gray-400">
-                                        <div class="max-w-xs overflow-hidden">
-                                            <p class="font-semibold text-gray-800 dark:text-white truncate">{{ $review->title }}</p>
-                                            <p class="truncate text-xs">{{ $review->body }}</p>
+                                    <td class="px-6 py-5 text-sm">
+                                        <div class="max-w-xs">
+                                            <p class="font-black text-slate-900 truncate tracking-tight">{{ $review->title }}</p>
+                                            <p class="truncate text-[11px] text-slate-500 font-medium mt-0.5">{{ $review->body }}</p>
                                         </div>
                                     </td>
-                                    <td class="px-4 py-4 text-sm whitespace-nowrap text-center">
-                                        <div class="flex items-center gap-x-1 text-yellow-400">
-                                            @for($i = 0; $i < $review->rating; $i++)
-                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
-                                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                                </svg>
+                                    <td class="px-6 py-5 text-sm whitespace-nowrap text-center">
+                                        <div class="flex items-center justify-center gap-0.5">
+                                            @for($i = 0; $i < 5; $i++)
+                                                <i class="fa-solid fa-star text-[10px] {{ $i < $review->rating ? 'text-emerald-400' : 'text-slate-200' }}"></i>
                                             @endfor
                                         </div>
                                     </td>
-                                    <td class="px-4 py-4 text-sm whitespace-nowrap">
+                                    <td class="px-6 py-5 text-sm whitespace-nowrap text-center">
                                         @if($review->approved == \App\Models\Admin\Review::APPROVED)
-                                            <span class="px-2 py-1 text-xs font-medium text-green-700 bg-green-100 rounded-full">Approved</span>
+                                            <span class="px-3 py-1 text-[10px] font-black uppercase tracking-widest text-emerald-700 bg-emerald-100 rounded-full border border-emerald-200 shadow-sm">Verified</span>
                                         @elseif($review->approved == \App\Models\Admin\Review::REJECTED)
-                                            <span class="px-2 py-1 text-xs font-medium text-red-700 bg-red-100 rounded-full">Rejected</span>
+                                            <span class="px-3 py-1 text-[10px] font-black uppercase tracking-widest text-red-700 bg-red-100 rounded-full border border-red-200 shadow-sm">Blocked</span>
                                         @else
-                                            <span class="px-2 py-1 text-xs font-medium text-gray-700 bg-gray-100 rounded-full">Pending</span>
+                                            <span class="px-3 py-1 text-[10px] font-black uppercase tracking-widest text-slate-600 bg-slate-100 rounded-full border border-slate-200 shadow-sm">Pending</span>
                                         @endif
                                     </td>
-                                    <td class="px-4 py-4 text-sm whitespace-nowrap text-right">
-                                        <div class="flex items-center justify-end gap-x-2">
+                                    <td class="px-6 py-5 text-sm whitespace-nowrap text-right">
+                                        <div class="flex items-center justify-end gap-x-3">
                                             @if($review->approved != \App\Models\Admin\Review::APPROVED)
                                                 <form action="{{ route('admin.reviews.status', $review->id) }}" method="POST">
-                                                    @csrf
-                                                    @method('PATCH')
+                                                    @csrf @method('PATCH')
                                                     <input type="hidden" name="status" value="{{ \App\Models\Admin\Review::APPROVED }}">
-                                                    <button type="submit" class="text-blue-600 hover:cursor-pointer hover:text-blue-900 dark:text-blue-400">Approve</button>
+                                                    <button type="submit" class="p-2 bg-emerald-50 text-emerald-600 rounded-xl hover:bg-emerald-500 hover:text-white transition-all border border-emerald-100 shadow-sm shadow-emerald-100">
+                                                        <i class="fa-solid fa-check text-xs"></i>
+                                                    </button>
                                                 </form>
                                             @endif
 
                                             @if($review->approved != \App\Models\Admin\Review::REJECTED)
                                                 <form action="{{ route('admin.reviews.status', $review->id) }}" method="POST">
-                                                    @csrf
-                                                    @method('PATCH')
+                                                    @csrf @method('PATCH')
                                                     <input type="hidden" name="status" value="{{ \App\Models\Admin\Review::REJECTED }}">
-                                                    <button type="submit" class="text-orange-600 hover:cursor-pointer hover:text-orange-900 dark:text-orange-400">Reject</button>
+                                                    <button type="submit" class="p-2 bg-slate-900 text-white rounded-xl hover:bg-red-600 transition-all shadow-lg shadow-slate-900/10">
+                                                        <i class="fa-solid fa-ban text-xs"></i>
+                                                    </button>
                                                 </form>
                                             @endif
 
-                                            <button type="button" data-id="{{ $review->id }}" class="text-red-600 hover:text-red-900 dark:text-red-400 delete-review-btn">Delete</button>
+                                            <button type="button" data-id="{{ $review->id }}" class="p-2 text-slate-300 hover:text-red-500 transition-colors delete-review-btn">
+                                                <i class="fa-solid fa-trash-can text-xs"></i>
+                                            </button>
                                         </div>
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="7" class="px-4 py-8 text-center text-gray-500 dark:text-gray-400">
-                                        No reviews found.
-                                    </td>
+                                    <td colspan="7" class="px-6 py-12 text-center text-slate-400 font-black uppercase tracking-widest text-xs">No feedback data recorded</td>
                                 </tr>
                             @endforelse
                             </tbody>

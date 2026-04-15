@@ -16,4 +16,9 @@ class Color extends Model
     {
         return $this->belongsToMany(Product::class);
     }
+
+    public function categories(): BelongsToMany
+    {
+        return $this->belongsToMany(\App\Models\Category::class, 'category_color');
+    }
 }

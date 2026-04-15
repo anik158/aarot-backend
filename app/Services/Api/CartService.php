@@ -28,9 +28,9 @@ class CartService
     }
 
 
-    public function addToCart($productId, $colorId = null, $sizeId = null, $qty = 1, $guestToken = null)
+    public function addToCart($productId, $options = [], $qty = 1, $guestToken = null)
     {
-        $product = Product::with(['colors', 'sizes'])->findOrFail($productId);
+        $product = Product::with(['attributeValues.attribute'])->findOrFail($productId);
 
         if ($product->status !== 1) {
             throw new \Exception("Product is not available.");
@@ -40,18 +40,9 @@ class CartService
             throw new \Exception("Insufficient stock for {$product->name}. Only {$product->qty} left.");
         }
 
-        $colorName = null;
-        $sizeName = null;
-
-        if ($colorId) {
-            $color = $product->colors->firstWhere('id', $colorId);
-            $colorName = $color ? $color->name : null;
-        }
-
-        if ($sizeId) {
-            $size = $product->sizes->firstWhere('id', $sizeId);
-            $sizeName = $size ? $size->name : null;
-        }
+        // Sort options to ensure consistent matching
+        ksort($options);
+        $optionsJson = json_encode($options);
 
         $user = $this->getCurrentUser();
         if ($user) {
@@ -61,8 +52,7 @@ class CartService
             $cartItem = CartItem::where([
                 'cart_id'    => $cart->id,
                 'product_id' => $productId,
-                'color_id'   => $colorId,
-                'size_id'    => $sizeId,
+                'options'    => $optionsJson,
             ])->first();
 
             if ($cartItem) {
@@ -71,21 +61,16 @@ class CartService
                     'price'      => $product->price,
                     'title'      => $product->name,
                     'image'      => $product->first_image ? asset($product->first_image) : null,
-                    'color_name' => $colorName,
-                    'size_name'  => $sizeName,
                 ]);
             } else {
                 $cartItem = CartItem::create([
                     'cart_id'    => $cart->id,
                     'product_id' => $productId,
-                    'color_id'   => $colorId,
-                    'size_id'    => $sizeId,
+                    'options'    => $optionsJson,
                     'quantity'   => $qty,
                     'price'      => $product->price,
                     'title'      => $product->name,
                     'image'      => $product->first_image ? asset($product->first_image) : null,
-                    'color_name' => $colorName,
-                    'size_name'  => $sizeName,
                 ]);
             }
 
@@ -96,21 +81,18 @@ class CartService
             $cartData = Redis::get($key);
             $cart = $cartData ? json_decode($cartData, true) : [];
 
-            $itemKey = "{$productId}_{$colorId}_{$sizeId}";
+            $itemKey = $productId . '_' . md5($optionsJson);
 
             if (isset($cart[$itemKey])) {
                 $cart[$itemKey]['qty'] = $qty;
             } else {
                 $cart[$itemKey] = [
                     'productId'  => $productId,
-                    'colorId'    => $colorId,
-                    'sizeId'     => $sizeId,
+                    'options'    => $options,
                     'qty'        => $qty,
                     'price'      => $product->price,
                     'title'      => $product->name,
                     'image'      => $product->first_image ? asset($product->first_image) : null,
-                    'colorName'  => $colorName,
-                    'sizeName'   => $sizeName,
                 ];
             }
 
@@ -125,7 +107,7 @@ class CartService
     {
         $user = $this->getCurrentUser();
         if ($user) {
-            $cart = Cart::with(['items.product', 'items.color', 'items.size'])
+            $cart = Cart::with(['items.product'])
                 ->where('user_id', $user->id)
                 ->first();
 
@@ -134,14 +116,11 @@ class CartService
             return $cart->items->map(function ($item) {
                 return [
                     'productId' => $item->product_id,
-                    'colorId'   => $item->color_id,
-                    'sizeId'    => $item->size_id,
+                    'options'   => json_decode($item->options, true) ?? [],
                     'qty'       => $item->quantity,
                     'price'     => $item->price,
                     'title'     => $item->product ? $item->product->name : 'Unknown',
                     'image'     => ($item->product && $item->product->first_image) ? asset($item->product->first_image) : null,
-                    'colorName' => $item->color ? $item->color->name : null,
-                    'sizeName'  => $item->size ? $item->size->name : null,
                 ];
             });
         } else {
@@ -171,8 +150,11 @@ class CartService
         }
     }
 
-    public function updateQuantity($productId, $colorId = null, $sizeId = null, $qty = 1, $guestToken = null)
+    public function updateQuantity($productId, $options = [], $qty = 1, $guestToken = null)
     {
+        ksort($options);
+        $optionsJson = json_encode($options);
+
         $user = $this->getCurrentUser();
         if ($user) {
             $cart = Cart::where('user_id', $user->id)->first();
@@ -180,8 +162,7 @@ class CartService
 
             $cartItem = CartItem::where('cart_id', $cart->id)
                 ->where('product_id', $productId)
-                ->where('color_id', $colorId)
-                ->where('size_id', $sizeId)
+                ->where('options', $optionsJson)
                 ->first();
 
             if ($cartItem) {
@@ -198,7 +179,7 @@ class CartService
             $cartData = Redis::get($key);
             $cart = $cartData ? json_decode($cartData, true) : [];
 
-            $itemKey = "{$productId}_{$colorId}_{$sizeId}";
+            $itemKey = $productId . '_' . md5($optionsJson);
 
             if (isset($cart[$itemKey])) {
                 if ($qty <= 0) {
@@ -214,9 +195,9 @@ class CartService
     }
 
 
-    public function removeItem($productId, $colorId = null, $sizeId = null, $guestToken = null)
+    public function removeItem($productId, $options = [], $guestToken = null)
     {
-        return $this->updateQuantity($productId, $colorId, $sizeId, 0, $guestToken);
+        return $this->updateQuantity($productId, $options, 0, $guestToken);
     }
 
 
@@ -239,20 +220,21 @@ class CartService
         $cart = Cart::firstOrCreate(['user_id' => $user->id]);
 
         foreach ($guestCart as $item) {
+            $options = $item['options'] ?? [];
+            ksort($options);
+            $optionsJson = json_encode($options);
+
             CartItem::updateOrCreate(
                 [
                     'cart_id'    => $cart->id,
                     'product_id' => $item['productId'],
-                    'color_id'   => $item['colorId'],
-                    'size_id'    => $item['sizeId'],
+                    'options'    => $optionsJson,
                 ],
                 [
                     'quantity'   => DB::raw("quantity + " . ($item['qty'] ?? 1)),
                     'price'      => $item['price'],
                     'title'      => $item['title'] ?? null,
                     'image'      => $item['image'] ?? null,
-                    'color_name' => $item['colorName'] ?? null,
-                    'size_name'  => $item['sizeName'] ?? null,
                 ]
             );
         }

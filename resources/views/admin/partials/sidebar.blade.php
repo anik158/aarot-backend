@@ -13,8 +13,8 @@
 
         <nav class="flex-1 px-4 space-y-2">
             <p class="px-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 mb-2">Main Menu</p>
-            
-            <a class="flex items-center gap-3 px-4 py-4 text-sm font-bold rounded-2xl transition-all duration-300 {{request()->routeIs('admin.index') ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 shadow-[0_0_20px_rgba(16,185,129,0.1)]' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white'}}" 
+
+            <a class="flex items-center gap-3 px-4 py-4 text-sm font-bold rounded-2xl transition-all duration-300 {{request()->routeIs('admin.index') ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 shadow-[0_0_20px_rgba(16,185,129,0.1)]' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white'}}"
                href="{{route('admin.index')}}">
                 <svg class="w-5 h-5 opacity-80" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" />
@@ -25,7 +25,24 @@
 
             <div class="pt-4">
                 <p class="px-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 mb-2">Inventory Control</p>
-                
+
+                @php
+                    $subitems = [
+                        ['route' => 'admin.attributes.index', 'name' => 'Attributes', 'pattern' => 'admin.attributes.*'],
+                        ['route' => 'admin.categories.index', 'name' => 'Categories', 'pattern' => 'admin.categories.*'],
+                        ['route' => 'admin.products.index', 'name' => 'Products', 'pattern' => 'admin.products.*'],
+                        ['route' => 'admin.coupons.index', 'name' => 'Coupons', 'pattern' => 'admin.coupons.*'],
+                        ['route' => 'admin.reviews.index', 'name' => 'Customer Reviews', 'pattern' => 'admin.reviews.*'],
+                    ];
+                    $isEcommerceOpen = false;
+                    foreach($subitems as $item) {
+                        if(request()->routeIs($item['pattern'])) {
+                            $isEcommerceOpen = true;
+                            break;
+                        }
+                    }
+                @endphp
+
                 <div class="space-y-1">
                     <button onclick="this.nextElementSibling.classList.toggle('max-h-0'); this.nextElementSibling.classList.toggle('max-h-[1000px]'); this.querySelector('.arrow').classList.toggle('rotate-180')"
                             class="w-full flex items-center justify-between px-4 py-4 text-sm font-bold text-slate-400 rounded-2xl transition-all duration-300 hover:bg-slate-800/50 hover:text-white group">
@@ -35,23 +52,14 @@
                             </svg>
                             <span>E-Commerce Config</span>
                         </div>
-                        <svg class="arrow w-4 h-4 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                        <svg class="arrow w-4 h-4 transition-transform duration-300 {{$isEcommerceOpen ? 'rotate-180' : ''}}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
                     </button>
-                    
-                    <div class="max-h-0 overflow-hidden transition-all duration-500 ease-in-out pl-10 space-y-1">
-                        @php $subitems = [
-                            ['route' => 'admin.categories.index', 'name' => 'Categories'],
-                            ['route' => 'admin.products.index', 'name' => 'Products'],
-                            ['route' => 'admin.colors.index', 'name' => 'Colors'],
-                            ['route' => 'admin.sizes.index', 'name' => 'Sizes'],
-                            ['route' => 'admin.coupons.index', 'name' => 'Coupons'],
-                            ['route' => 'admin.reviews.index', 'name' => 'Customer Reviews'],
-                        ]; @endphp
 
+                    <div class="{{$isEcommerceOpen ? 'max-h-[1000px]' : 'max-h-0'}} overflow-hidden transition-all duration-500 ease-in-out pl-10 space-y-1">
                         @foreach($subitems as $item)
-                        <a href="{{route($item['route'])}}" 
-                           class="flex items-center py-3 text-[13px] font-medium transition-colors {{request()->routeIs($item['route']) ? 'text-emerald-500' : 'text-slate-500 hover:text-white'}}">
-                           <span class="w-1.5 h-1.5 rounded-full bg-slate-700 mr-3 {{request()->routeIs($item['route']) ? 'bg-emerald-500 ring-4 ring-emerald-500/20' : ''}}"></span>
+                        <a href="{{route($item['route'])}}"
+                           class="flex items-center py-3 text-[13px] font-medium transition-colors {{request()->routeIs($item['pattern']) ? 'text-emerald-500' : 'text-slate-400 hover:text-white'}}">
+                           <span class="w-1.5 h-1.5 rounded-full bg-slate-700 mr-3 {{request()->routeIs($item['pattern']) ? 'bg-emerald-500 ring-4 ring-emerald-500/20' : ''}}"></span>
                            {{$item['name']}}
                         </a>
                         @endforeach

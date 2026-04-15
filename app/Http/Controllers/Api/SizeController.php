@@ -17,8 +17,15 @@ class SizeController extends Controller
 
         try
         {
-            $sizes = Size::select(['id','name'])
-                ->get();
+            $query = Size::select(['id', 'name']);
+
+            if ($request->has('category_id') && $request->category_id != '') {
+                $query->whereHas('products', function($q) use ($request) {
+                    $q->where('category_id', $request->category_id);
+                });
+            }
+
+            $sizes = $query->get();
 
             return $this->success(SizeResource::collection($sizes), 'Size fetched successfully', 200);
         }catch (\Exception $e){

@@ -20,7 +20,7 @@ class ProductController extends Controller
     {
         try {
             $limit = $request->get('limit', 3);
-            $products = Product::with(['colors', 'sizes'])
+            $products = Product::with(['attributeValues.attribute'])
                 ->where('status', Product::STATUS_ACTIVE)
                 ->orderBy('id', 'desc')
                 ->limit($limit)
@@ -36,42 +36,31 @@ class ProductController extends Controller
 
     public function index(Request $request)
     {
-
-
         try{
-            $productQuery = Product::with([ 'reviews']);
+            $productQuery = Product::with([ 'reviews', 'attributeValues.attribute']);
 
             if($request->has('category') && $request->category !='')
             {
-                $productQuery->whereHas('category', function($q) use($request){
-                    $q->where('category_id', $request->category);
-                });
+                $productQuery->where('category_id', $request->category);
             }
 
-
-            if($request->has('color') && $request->color !='')
-            {
-                $productQuery->whereHas('colors', function($q) use($request){
-                    $q->where('colors.id', $request->color);
-                });
-            }
-
-            if($request->has('size') && $request->size !='')
-            {
-                $productQuery->whereHas('sizes', function($q) use($request){
-                    $q->where('sizes.id', $request->size);
-                });
+            if ($request->has('options') && is_array($request->options)) {
+                $options = $request->options;
+                foreach ($options as $optionId) {
+                    if ($optionId) {
+                        $productQuery->whereHas('attributeValues', function($q) use($optionId) {
+                            $q->where('attribute_values.id', $optionId);
+                        });
+                    }
+                }
             }
 
             if($request->has('search') && trim($request->search) != '')
             {
-                $productQuery->where(function($q) use($request){
-                    $q->where('products.name', 'like', '%'.$request->search.'%');
-                } );
+                $productQuery->where('name', 'like', '%'.$request->search.'%');
             }
 
-
-            $products = $productQuery->orderBy('id', 'desc')->get();;
+            $products = $productQuery->orderBy('id', 'desc')->get();
             $productCollection = ProductResource::collection($products);
             return $this->success($productCollection, 'Products fetched successfully', 200);
         }catch (\Exception $e){
@@ -84,7 +73,7 @@ class ProductController extends Controller
     public function show($id)
     {
         try{
-            $product = Product::with(['colors', 'sizes', 'reviews.user'])
+            $product = Product::with(['attributeValues.attribute', 'reviews.user'])
                 ->where('id', $id)
                 ->firstOrFail();
             if($product)

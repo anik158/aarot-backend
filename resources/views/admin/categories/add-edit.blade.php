@@ -5,78 +5,99 @@
 @endphp
 
 @section('content')
-    <section class="max-w-4xl p-6 mx-auto bg-white rounded-md shadow-md dark:bg-gray-800">
-        <div class="flex flex-row justify-between">
-            <h2 class="text-lg font-semibold text-gray-700 capitalize dark:text-white">
-                {{ $edit ? 'Edit Category' : 'Add New Category' }}
-            </h2>
-            <a href="{{ route('admin.categories.index') }}"
-               class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 transition-colors">
-                <i class="fa-solid fa-backward"></i> Back
+    <div class="px-4 mx-auto max-w-5xl">
+        <div class="flex items-center justify-between mb-10">
+            <div>
+                <h2 class="text-4xl font-black text-slate-900 tracking-tighter">
+                    {{ $edit ? 'Edit Category' : 'New Category' }}
+                </h2>
+                <p class="mt-2 text-sm font-bold text-slate-500 uppercase tracking-widest">
+                    {{ $edit ? 'Modify your department details and specifications.' : 'Initialize a new product department.' }}
+                </p>
+            </div>
+            <a href="{{ route('admin.categories.index') }}" class="flex items-center gap-2 px-6 py-3 text-sm font-black text-slate-600 bg-white border border-slate-200 rounded-2xl hover:bg-slate-50 hover:text-slate-900 transition-all duration-300 shadow-sm shadow-slate-100">
+                <i class="fa-solid fa-arrow-left"></i> Collections
             </a>
         </div>
 
-        <form action="{{ $edit ? route('admin.categories.update', $category) : route('admin.categories.store') }}"
-              method="POST"
-              id="categoryForm"
-              enctype="multipart/form-data">
+        <div class="bg-white border border-slate-200 rounded-[2.5rem] shadow-2xl shadow-slate-200/50 overflow-hidden">
+            <form action="{{ $edit ? route('admin.categories.update', $category) : route('admin.categories.store') }}"
+                  method="POST"
+                  id="categoryForm"
+                  class="p-10"
+                  enctype="multipart/form-data">
 
             @csrf
             @if($edit)
                 @method('PUT')
             @endif
 
-            <div class="grid grid-cols-1 gap-6 mt-6">
+            <div class="grid grid-cols-1 gap-8 mt-6">
                 <div>
-                    <label class="text-gray-700 dark:text-gray-200" for="name">Category Name</label>
-                    <input id="name" name="name" type="text"
-                           value="{{ old('name', $edit ? $category->name : '') }}"
-                           class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring">
+                    <label class="block mb-2 text-xs font-black uppercase tracking-widest text-slate-400">Category Full Name</label>
+                    <x-admin.input id="name" name="name" type="text" placeholder="Department title..." 
+                                   value="{{ old('name', $edit ? $category->name : '') }}" required />
                 </div>
 
                 <div>
-                    <label class="text-gray-700 dark:text-gray-200" for="slug">Slug</label>
-                    <input id="slug" name="slug" type="text"
-                           value="{{ old('slug', $edit ? $category->slug : '') }}"
-                           class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring">
+                    <label class="block mb-2 text-xs font-black uppercase tracking-widest text-slate-400">URL Slug / Identifier</label>
+                    <x-admin.input id="slug" name="slug" type="text" placeholder="url-slug" 
+                                   value="{{ old('slug', $edit ? $category->slug : '') }}" required />
                 </div>
 
                 <div>
-                    <label class="text-gray-700 dark:text-gray-200" for="description">Description</label>
-                    <textarea id="description" name="description" rows="4"
-                              class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring">{{ old('description', $edit ? $category->description : '') }}</textarea>
+                    <label class="block mb-2 text-xs font-black uppercase tracking-widest text-slate-400">Exposition / Description</label>
+                    <x-admin.textarea id="description" name="description" rows="4" placeholder="Brief department overview...">{{ old('description', $edit ? $category->description : '') }}</x-admin.textarea>
                 </div>
 
-                <div>
-                    <label class="text-gray-700 dark:text-gray-200" for="image">Category Image</label>
+                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100">
+                    <label class="block mb-2 text-xs font-black uppercase tracking-widest text-slate-500">Master Visual / Icon</label>
                     <input id="image" name="image" type="file"
-                           class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring">
+                           class="block w-full text-xs text-slate-500 file:mr-4 file:py-3 file:px-6 file:rounded-xl file:border-0 file:text-xs file:font-black file:uppercase file:bg-slate-900 file:text-white hover:file:bg-slate-800 transition-all cursor-pointer">
 
                     @if($edit && $category->image)
-                        <div class="mt-3">
-                            <img src="{{ asset('storage/' .$category->image) }}" alt="Current Image" class="w-32 h-32 object-cover rounded-md border">
+                        <div class="mt-6 p-2 bg-white rounded-2xl border border-slate-200 w-fit shadow-lg shadow-slate-200/50">
+                            <img src="{{ asset($category->image) }}" alt="Current Image" class="w-32 h-32 object-cover rounded-xl">
                         </div>
                     @endif
                 </div>
 
                 <div>
-                    <label class="text-gray-700 dark:text-gray-200" for="status">Status</label>
-                    <select id="status" name="status"
-                            class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring">
-                        <option value="1" {{ old('status', $edit ? $category->status : '1') == '1' ? 'selected' : '' }}>Active</option>
-                        <option value="0" {{ old('status', $edit ? $category->status : '1') == '0' ? 'selected' : '' }}>Inactive</option>
-                    </select>
+                    <label class="block mb-2 text-xs font-black uppercase tracking-widest text-slate-400">Collection Status</label>
+                    <x-admin.custom-select 
+                        name="status" 
+                        :selected="old('status', $edit ? $category->status : '1')"
+                        :options="['1' => 'Operational / Active', '0' => 'Disabled / Hidden']" />
+                </div>
+
+                <div class="mt-8 space-y-6">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-2xl font-black text-slate-900 tracking-tight">Specification Protocols</h3>
+                        <span class="px-3 py-1 bg-emerald-50 text-emerald-600 border border-emerald-100 text-[10px] font-black uppercase tracking-widest rounded-full">Linked Specs</span>
+                    </div>
+                    <p class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Select which attributes are relevant for products in this category (e.g. Size for Clothes, RAM for Laptops).</p>
+                    
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-6">
+                        @foreach($attributes as $attr)
+                            <label class="flex items-center gap-4 p-5 bg-white border border-slate-200 rounded-2xl cursor-pointer hover:border-emerald-400 hover:bg-slate-50/50 transition-all group">
+                                <input type="checkbox" name="attributes[]" value="{{ $attr->id }}"
+                                       @if($edit && $category->attributes->contains($attr->id)) checked @endif
+                                       class="w-5 h-5 text-emerald-500 border-slate-300 rounded-lg focus:ring-emerald-500/20 focus:ring-4">
+                                <span class="text-sm font-bold text-slate-700 group-hover:text-emerald-600 transition-colors">{{ $attr->name }}</span>
+                            </label>
+                        @endforeach
+                    </div>
                 </div>
             </div>
 
-            <div class="flex justify-end mt-8">
+            <div class="flex justify-end mt-12 pt-8 border-t border-slate-100">
                 <button type="submit"
-                        class="px-8 py-2.5 leading-5 text-white hover:cursor-pointer transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-600 dark:hover:bg-gray-700 dark:bg-gray-900 focus:outline-none">
-                    {{ $edit ? 'Update Category' : 'Create Category' }}
+                        class="px-12 py-5 font-black uppercase tracking-[0.2em] text-white transition-all duration-300 transform bg-emerald-500 rounded-3xl shadow-2xl shadow-emerald-500/30 hover:bg-emerald-600 hover:scale-[1.02] active:scale-[0.98] outline-none">
+                    {{ $edit ? 'Commit Sync' : 'Initialize Protocol' }}
                 </button>
             </div>
         </form>
-    </section>
+    </div>
 @endsection
 
 @push('js')
@@ -119,6 +140,8 @@
                             if (xhr.status === 422) {
                                 let errors = xhr.responseJSON.errors;
                                 errorMsg = Object.values(errors).flat().join('<br>');
+                            } else if (xhr.status === 413) {
+                                errorMsg = "The uploaded file is too large for the server to process.";
                             }
                             Swal.fire({
                                 icon: "error",

@@ -10,7 +10,7 @@ class ProductService
 {
     public function store($request)
     {
-        $data = $request->except(['colors', 'sizes', 'first_image', 'second_image', 'third_image']);
+        $data = $request->except(['attribute_values', 'first_image', 'second_image', 'third_image']);
 
         if ($request->hasFile('first_image')) {
             $data['first_image'] = $this->uploadImage($request->file('first_image'));
@@ -24,11 +24,8 @@ class ProductService
 
         $product = Product::create($data);
 
-        if ($request->has('colors')) {
-            $product->colors()->sync($request->colors);
-        }
-        if ($request->has('sizes')) {
-            $product->sizes()->sync($request->sizes);
+        if ($request->has('attribute_values')) {
+            $product->attributeValues()->sync($request->attribute_values);
         }
 
         return $product;
@@ -36,7 +33,7 @@ class ProductService
 
     public function update($request, $product)
     {
-        $data = $request->except(['colors', 'sizes', 'first_image', 'second_image', 'third_image']);
+        $data = $request->except(['attribute_values', 'first_image', 'second_image', 'third_image']);
 
         if ($request->hasFile('first_image')) {
             $this->deleteImage($product->first_image);
@@ -53,8 +50,7 @@ class ProductService
 
         $product->update($data);
 
-        $product->colors()->sync($request->colors ?? []);
-        $product->sizes()->sync($request->sizes ?? []);
+        $product->attributeValues()->sync($request->attribute_values ?? []);
 
         return $product;
     }
@@ -65,8 +61,7 @@ class ProductService
         $this->deleteImage($product->second_image);
         $this->deleteImage($product->third_image);
 
-        $product->colors()->detach();
-        $product->sizes()->detach();
+        $product->attributeValues()->detach();
 
         $product->delete();
     }

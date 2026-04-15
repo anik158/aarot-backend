@@ -34,37 +34,36 @@ class CategoryController extends Controller
 
     public function create()
     {
-        return view('admin.categories.add-edit');
+        $attributes = \App\Models\Admin\Attribute::where('status', 1)->get();
+        return view('admin.categories.add-edit', compact('attributes'));
     }
 
     public function store(CategoryRequest $request)
     {
         try {
             $category = $this->categoryService->store($request);
-            return redirect()->route('admin.categories.index')
-                ->with('success', 'Category created successfully.');
+            // Handle AJAX or Redirect based on request if needed, 
+            // but the current add-edit.blade uses AJAX for categoryForm
+            return response()->json(['success' => true, 'message' => 'Category created successfully.']);
         } catch (\Exception $e) {
-            return redirect()->back()
-                ->with('error', 'Failed to create category: ' . $e->getMessage())
-                ->withInput();
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
     }
 
     public function edit(Category $category)
     {
-        return view('admin.categories.add-edit', compact('category'));
+        $category->load('attributes');
+        $attributes = \App\Models\Admin\Attribute::where('status', 1)->get();
+        return view('admin.categories.add-edit', compact('category', 'attributes'));
     }
 
     public function update(CategoryRequest $request, Category $category)
     {
         try {
             $this->categoryService->update($request, $category);
-            return redirect()->route('admin.categories.index')
-                ->with('success', 'Category updated successfully.');
+            return response()->json(['success' => true, 'message' => 'Category updated successfully.']);
         } catch (\Exception $e) {
-            return redirect()->back()
-                ->with('error', 'Failed to update category: ' . $e->getMessage())
-                ->withInput();
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
     }
 
@@ -83,5 +82,10 @@ class CategoryController extends Controller
             return redirect()->back()
                 ->with('error', 'Failed to delete category.');
         }
+    }
+
+    public function getAttributes(Category $category)
+    {
+        return response()->json($category->attributes()->with('values')->get());
     }
 }

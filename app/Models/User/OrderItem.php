@@ -12,14 +12,14 @@ class OrderItem extends Model
     protected $fillable = [
         'order_id',
         'product_id',
-        'color_id',
-        'size_id',
+        'options',
         'quantity',
         'price',
     ];
 
     protected $casts = [
         'price' => 'decimal:2',
+        'options' => 'array',
     ];
 
     public function order()
@@ -30,15 +30,5 @@ class OrderItem extends Model
     public function product()
     {
         return $this->belongsTo(Product::class);
-    }
-
-    public function color()
-    {
-        return $this->belongsTo(Color::class);
-    }
-
-    public function size()
-    {
-        return $this->belongsTo(Size::class);
     }
 }

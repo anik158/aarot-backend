@@ -31,8 +31,7 @@ class CheckoutRequest extends FormRequest
 
             'cart_items'            => 'required|array|min:1',
             'cart_items.*.productId'=> 'required|integer|exists:products,id',
-            'cart_items.*.colorId'  => 'nullable|integer|exists:colors,id',
-            'cart_items.*.sizeId'   => 'nullable|integer|exists:sizes,id',
+            'cart_items.*.options'  => 'nullable|array',
             'cart_items.*.qty'      => 'required|integer|min:1',
             'cart_items.*.price'    => 'required|numeric|min:0',
         ];

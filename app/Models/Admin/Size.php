@@ -17,4 +17,9 @@ class Size extends Model
     {
         return $this->belongsToMany(Product::class, 'size_product');
     }
+
+    public function categories(): BelongsToMany
+    {
+        return $this->belongsToMany(\App\Models\Category::class, 'category_size');
+    }
 }

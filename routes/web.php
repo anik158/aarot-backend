@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ReviewController;
 use App\Http\Controllers\Admin\StripeWebhookController;
+use App\Http\Controllers\Admin\AttributeController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -21,11 +22,11 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.','middleware' => ['admin']],f
     Route::get('dashboard', [AdminController::class, 'index'])->name('index');
     Route::post('logout', [AdminController::class, 'logout'])->name('logout');
 
-    Route::resource('colors', ColorController::class);
-    Route::resource('sizes', SizeController::class);
+    Route::resource('attributes', AttributeController::class);
     Route::resource('coupons', CouponController::class);
     Route::resource('products', ProductController::class);
     Route::resource('categories',CategoryController::class);
+    Route::get('categories/{category}/attributes', [CategoryController::class, 'getAttributes'])->name('categories.attributes');
     Route::patch('reviews/{id}/status', [ReviewController::class, 'updateStatus'])->name('reviews.status');
     Route::resource('reviews', ReviewController::class);
 });

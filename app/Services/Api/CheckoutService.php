@@ -71,11 +71,13 @@ class CheckoutService
             foreach ($cartItems as $item) {
                 $product = Product::find($item['productId']);
 
+                $options = $item['options'] ?? [];
+                ksort($options);
+
                 OrderItem::create([
                     'order_id'   => $order->id,
                     'product_id' => $item['productId'],
-                    'color_id'   => $item['colorId'] ?? null,
-                    'size_id'    => $item['sizeId'] ?? null,
+                    'options'    => json_encode($options),
                     'quantity'   => $item['qty'],
                     'price'      => $item['price'],
                 ]);

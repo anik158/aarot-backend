@@ -1,65 +1,89 @@
 @extends('admin.layouts.app')
 
 @section('content')
-    <section class="max-w-4xl p-6 mx-auto bg-white rounded-md shadow-md dark:bg-gray-800">
-        <div class="flex flex-row justify-between items-center mb-6">
-            <h2 class="text-2xl font-bold text-gray-800 dark:text-white">
-                Category Details: {{ $category->name }}
-            </h2>
-            <div class="flex gap-x-3">
-                <a href="{{ route('admin.categories.index') }}"
-                   class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 transition-colors">
-                    <i class="fa-solid fa-backward"></i> Back
+    <div class="px-4 mx-auto max-w-5xl">
+        <div class="flex items-center justify-between mb-10">
+            <div>
+                <h2 class="text-4xl font-black text-slate-900 tracking-tighter">
+                    Category Specs
+                </h2>
+                <p class="mt-2 text-sm font-bold text-slate-500 uppercase tracking-widest">
+                    Collection / {{ $category->name }}
+                </p>
+            </div>
+            <div class="flex gap-4">
+                <a href="{{ route('admin.categories.index') }}" class="flex items-center gap-2 px-6 py-3 text-sm font-black text-slate-600 bg-white border border-slate-200 rounded-2xl hover:bg-slate-50 hover:text-slate-900 transition-all duration-300 shadow-sm shadow-slate-100">
+                    <i class="fa-solid fa-arrow-left"></i> List
                 </a>
-                <a href="{{ route('admin.categories.edit', $category) }}"
-                   class="px-4 py-2 text-sm font-medium text-white bg-gray-900 rounded-md hover:bg-gray-700 transition-colors">
-                    <i class="fa-solid fa-pen-to-square"></i> Edit
+                <a href="{{ route('admin.categories.edit', $category) }}" class="flex items-center gap-2 px-6 py-3 text-sm font-black text-white bg-slate-900 rounded-2xl hover:bg-slate-800 transition-all duration-300 shadow-xl shadow-slate-900/20">
+                    <i class="fa-solid fa-pen-nib"></i> Modify
                 </a>
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <!-- Image -->
-            <div class="lg:col-span-1">
-                @if($category->image)
-                    <img src="{{ asset('storage/' . $category->image) }}"
-                         alt="{{ $category->name }}"
-                         class="w-full rounded-lg shadow-md object-cover">
-                @else
-                    <div class="w-full h-64 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center border border-dashed border-gray-300 dark:border-gray-600">
-                        <span class="text-gray-400 text-sm">No Image Available</span>
-                    </div>
-                @endif
-            </div>
-
-            <!-- Details -->
-            <div class="lg:col-span-2 space-y-6">
-                <div class="flex items-center gap-4">
-                    <div>
-                        <p class="text-sm text-gray-500 dark:text-gray-400">Status</p>
-                        @if($category->status)
-                            <span class="px-3 py-1 text-xs font-medium text-green-700 bg-green-100 rounded-full">Active</span>
-                        @else
-                            <span class="px-3 py-1 text-xs font-medium text-red-700 bg-red-100 rounded-full">Inactive</span>
-                        @endif
-                    </div>
+        <div class="bg-white border border-slate-200 rounded-[2.5rem] shadow-2xl shadow-slate-200/50 overflow-hidden">
+            <div class="p-10 grid grid-cols-1 lg:grid-cols-3 gap-12">
+                <!-- Image -->
+                <div class="lg:col-span-1">
+                    @if($category->image)
+                        <div class="p-3 bg-slate-50 rounded-[2rem] border border-slate-100 shadow-inner">
+                            <img src="{{ asset('storage/' . $category->image) }}"
+                                 alt="{{ $category->name }}"
+                                 class="w-full h-80 object-cover rounded-[1.5rem] shadow-2xl shadow-slate-900/10">
+                        </div>
+                    @else
+                        <div class="w-full h-80 bg-slate-50 rounded-[2rem] flex flex-col items-center justify-center border-2 border-dashed border-slate-200">
+                            <i class="fa-solid fa-image text-4xl text-slate-200 mb-4"></i>
+                            <span class="text-slate-400 text-xs font-black uppercase tracking-widest">No Visual Attached</span>
+                        </div>
+                    @endif
                 </div>
 
-                <div>
-                    <p class="text-sm text-gray-500 dark:text-gray-400">Slug</p>
-                    <p class="font-mono text-gray-700 dark:text-gray-300">{{ $category->slug }}</p>
-                </div>
-
-                @if($category->description)
-                    <div>
-                        <p class="text-sm text-gray-500 dark:text-gray-400">Description</p>
-                        <div class="prose dark:prose-invert mt-2">
-                            {!! nl2br(e($category->description)) !!}
+                <!-- Details -->
+                <div class="lg:col-span-2 space-y-10">
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-6">
+                        <div>
+                            <p class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-2">Internal Title</p>
+                            <h3 class="text-3xl font-black text-slate-900 tracking-tight">{{ $category->name }}</h3>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-2">Metric Status</p>
+                            @if($category->status)
+                                <span class="px-4 py-1.5 text-[10px] font-black uppercase tracking-widest text-emerald-600 bg-emerald-50 rounded-full border border-emerald-100">Functional</span>
+                            @else
+                                <span class="px-4 py-1.5 text-[10px] font-black uppercase tracking-widest text-red-600 bg-red-50 rounded-full border border-red-100">Suspended</span>
+                            @endif
                         </div>
                     </div>
-                @endif
 
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                        <div>
+                            <p class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-2">URL Identifier</p>
+                            <p class="px-4 py-2 bg-slate-50 text-slate-600 rounded-xl font-mono text-sm border border-slate-100 w-fit">{{ $category->slug }}</p>
+                        </div>
+                    </div>
+
+                    @if($category->description)
+                        <div>
+                            <p class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-3">Narrative / Description</p>
+                            <div class="text-slate-600 leading-relaxed font-medium">
+                                {!! nl2br(e($category->description)) !!}
+                            </div>
+                        </div>
+                    @endif
+
+                    @if($category->attributes->count() > 0)
+                        <div class="pt-8 border-t border-slate-100">
+                            <p class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-4">Linked Specifications</p>
+                            <div class="flex flex-wrap gap-2">
+                                @foreach($category->attributes as $attr)
+                                    <span class="px-3 py-1 bg-white border border-slate-200 text-slate-600 text-[11px] font-bold rounded-lg shadow-sm">{{ $attr->name }}</span>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
+                </div>
             </div>
         </div>
-    </section>
+    </div>
 @endsection

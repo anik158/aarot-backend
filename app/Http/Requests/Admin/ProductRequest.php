@@ -27,10 +27,8 @@ class ProductRequest extends FormRequest
             'price'       => 'required|numeric|min:0',
             'description' => 'nullable|string',
             'status'      => 'required|in:0,1',
-            'colors'      => 'nullable|array',
-            'colors.*'    => 'exists:colors,id',
-            'sizes'       => 'nullable|array',
-            'sizes.*'     => 'exists:sizes,id',
+            'attribute_values'   => 'nullable|array',
+            'attribute_values.*' => 'exists:attribute_values,id',
             'category_id' => 'nullable|exists:categories,id',
         ];
 

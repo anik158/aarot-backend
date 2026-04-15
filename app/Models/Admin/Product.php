@@ -14,12 +14,8 @@ class Product extends Model
 
     const STATUS_ACTIVE = 1;
     const STATUS_INACTIVE = 0;
-    public function colors(): belongsToMany {
-        return $this->belongsToMany(Color::class);
-    }
-
-    public function sizes(): belongsToMany {
-        return $this->belongsToMany(Size::class, 'size_product');
+    public function attributeValues(): belongsToMany {
+        return $this->belongsToMany(AttributeValue::class, 'attribute_value_product');
     }
 
     public function coupons(): belongsToMany {

@@ -23,7 +23,5 @@ class Review extends Model
         return $this->belongsTo(Product::class);
     }
 
-    public function getCreatedAtAttribute($value) {
-        return Carbon::parse($value)->diffForHumans();
-    }
+
 }

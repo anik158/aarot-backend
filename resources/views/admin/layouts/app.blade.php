@@ -13,6 +13,8 @@
     <script src="https://kit.fontawesome.com/e727123d3e.js" crossorigin="anonymous"></script>
     <!-- Summernote Lite CSS -->
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.css" rel="stylesheet">
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 <body class="flex h-screen bg-slate-100 font-sans">
 <!-- Sidebar Overlay (for mobile) -->

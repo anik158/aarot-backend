@@ -43,15 +43,12 @@ class ProductController extends Controller
 
     public function create()
     {
-        $colors = Color::all();
-        $sizes = Size::all();
-        $categories = Category::where('status', Category::STATUS_ACTIVE )->get();
-
+        $attributes = \App\Models\Admin\Attribute::with('values')->get();
+        $categories = Category::where('status', Category::STATUS_ACTIVE)->get();
 
         return view('admin.product.add-edit', [
             'product' => null,
-            'colors' => $colors,
-            'sizes' => $sizes,
+            'attributes' => $attributes,
             'categories' => $categories
         ]);
     }
@@ -69,7 +66,7 @@ class ProductController extends Controller
 
     public function show(Product $product)
     {
-        $product->load(['colors', 'sizes']);
+        $product->load(['attributeValues.attribute']);
 
         $categories = Category::where('status', Category::STATUS_ACTIVE)->get();
         return view('admin.product.show', compact('product','categories'));
@@ -77,12 +74,11 @@ class ProductController extends Controller
 
     public function edit(Product $product)
     {
-        $colors = Color::all();
-        $sizes = Size::all();
-        $product->load(['colors', 'sizes']);
-        $categories = Category::where('status', Category::STATUS_ACTIVE )->get();
+        $attributes = \App\Models\Admin\Attribute::with('values')->get();
+        $product->load(['attributeValues']);
+        $categories = Category::where('status', Category::STATUS_ACTIVE)->get();
 
-        return view('admin.product.add-edit', compact('product', 'colors', 'sizes','categories'));
+        return view('admin.product.add-edit', compact('product', 'attributes', 'categories'));
     }
 
     public function update(ProductRequest $request, Product $product)

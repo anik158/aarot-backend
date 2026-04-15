@@ -22,4 +22,9 @@ class Category extends Model
     {
         return $this->hasMany(Product::class);
     }
+
+    public function attributes()
+    {
+        return $this->belongsToMany(\App\Models\Admin\Attribute::class, 'attribute_category');
+    }
 }

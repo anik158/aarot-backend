@@ -2,81 +2,81 @@
 
 @section('content')
     <section class="container px-4 mx-auto">
-        <div class="sm:flex sm:items-center sm:justify-between">
+        <div class="sm:flex sm:items-center sm:justify-between mb-8">
             <div>
                 <div class="flex items-center gap-x-3">
-                    <h2 class="text-lg font-medium text-gray-800 dark:text-white">Categories</h2>
-                    <span class="px-3 py-1 text-xs text-blue-600 bg-blue-100 rounded-full dark:bg-gray-800 dark:text-blue-400">
-                    {{ $categories->total() }} categories
-                </span>
+                    <h2 class="text-3xl font-black tracking-tight text-slate-900">Categories</h2>
+                    <span class="px-3 py-1 text-xs font-bold text-emerald-700 bg-emerald-100 rounded-full">
+                        {{ $categories->total() }} Total
+                    </span>
                 </div>
-                <p class="mt-1 text-sm text-gray-500 dark:text-gray-300">Manage your product categories.</p>
+                <p class="mt-2 text-sm font-medium text-slate-500">Organize your products into departments and collections.</p>
             </div>
 
             <div class="flex items-center mt-4 gap-x-3">
                 <a href="{{ route('admin.categories.create') }}"
-                   class="flex items-center justify-center w-1/2 px-5 py-2 text-sm tracking-wide text-white transition-colors duration-200 bg-blue-500 rounded-lg shrink-0 sm:w-auto gap-x-2 hover:bg-blue-600">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                   class="flex items-center justify-center px-6 py-3 text-sm font-bold text-white transition-all duration-300 bg-emerald-500 rounded-2xl shadow-xl shadow-emerald-500/20 hover:bg-emerald-600 hover:scale-[1.02] active:scale-[0.98] gap-x-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
-                    <span>Add Category</span>
+                    <span>New Category</span>
                 </a>
             </div>
         </div>
 
-        <!-- Search with proper debounce -->
-        <div class="mt-6 md:flex md:items-center md:justify-between">
-            <div class="relative flex items-center mt-4 md:mt-0">
-            <span class="absolute">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mx-3 text-gray-400 dark:text-gray-600">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/>
-                </svg>
-            </span>
+        <!-- Search with premium styling -->
+        <div class="mt-8 flex items-center justify-between">
+            <div class="relative flex items-center w-full max-w-md">
+                <span class="absolute left-5 text-slate-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/>
+                    </svg>
+                </span>
                 <input type="text" id="search-input" value="{{ $search ?? '' }}"
-                       placeholder="Search categories..."
-                       class="block w-full py-1.5 pr-5 text-gray-700 bg-white border border-gray-200 rounded-lg md:w-80 placeholder-gray-400/70 pl-11 rtl:pr-11 rtl:pl-5 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40">
+                       placeholder="Search collections..."
+                       class="block w-full py-4 pl-14 pr-6 text-slate-700 bg-white border border-slate-200 rounded-2xl focus:border-emerald-400 focus:ring-4 focus:ring-emerald-500/10 focus:outline-none transition-all duration-300 shadow-sm border-slate-200 shadow-slate-200/50">
             </div>
         </div>
 
-        <div class="flex flex-col mt-6">
+        <div class="flex flex-col mt-10">
             <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                 <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-                    <div class="overflow-hidden border border-gray-200 dark:border-gray-700 md:rounded-lg">
-                        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                            <thead class="bg-gray-50 dark:bg-gray-800">
+                    <div class="overflow-hidden border border-slate-200 rounded-[2rem] bg-white shadow-2xl shadow-slate-200/50">
+                        <table class="min-w-full divide-y divide-slate-100">
+                            <thead class="bg-slate-50/50">
                             <tr>
-                                <th class="py-3.5 px-4 text-sm font-normal text-left text-gray-500 dark:text-gray-400">ID</th>
-                                <th class="px-4 py-3.5 text-sm font-normal text-left text-gray-500 dark:text-gray-400">Name</th>
-                                <th class="px-4 py-3.5 text-sm font-normal text-left text-gray-500 dark:text-gray-400">Slug</th>
-                                <th class="px-4 py-3.5 text-sm font-normal text-left text-gray-500 dark:text-gray-400">Status</th>
-                                <th class="relative py-3.5 px-4"><span class="sr-only">Actions</span></th>
+                                <th class="py-5 px-6 text-xs font-black uppercase tracking-widest text-slate-400 text-left">ID</th>
+                                <th class="px-6 py-5 text-xs font-black uppercase tracking-widest text-slate-400 text-left">Name</th>
+                                <th class="px-6 py-5 text-xs font-black uppercase tracking-widest text-slate-400 text-left">Slug</th>
+                                <th class="px-6 py-5 text-xs font-black uppercase tracking-widest text-slate-400 text-left">Status</th>
+                                <th class="relative py-5 px-6"><span class="sr-only">Actions</span></th>
                             </tr>
                             </thead>
-                            <tbody class="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
+                            <tbody class="bg-white divide-y divide-slate-50">
                             @forelse($categories as $category)
                                 <tr>
-                                    <td class="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
+                                    <td class="px-6 py-5 text-sm font-bold text-slate-700 whitespace-nowrap">
                                         {{ $categories->firstItem() + $loop->index }}
                                     </td>
-                                    <td class="px-4 py-4 text-sm text-gray-700 dark:text-gray-200 whitespace-nowrap">
+                                    <td class="px-6 py-5 text-sm font-black text-slate-800 whitespace-nowrap">
                                         {{ $category->name }}
                                     </td>
-                                    <td class="px-4 py-4 text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">
-                                        <code>{{ $category->slug }}</code>
+                                    <td class="px-6 py-5 text-sm text-slate-500 font-medium whitespace-nowrap">
+                                        <span class="bg-slate-100 px-3 py-1 rounded-lg border border-slate-200 font-mono text-xs uppercase tracking-tighter">{{ $category->slug }}</span>
                                     </td>
-                                    <td class="px-4 py-4 text-sm whitespace-nowrap">
+                                    <td class="px-6 py-5 text-sm whitespace-nowrap">
                                         @if($category->status)
-                                            <span class="px-2 py-1 text-xs font-medium text-green-700 bg-green-100 rounded-full">Active</span>
+                                            <span class="px-3 py-1 text-[10px] font-black uppercase tracking-widest text-emerald-700 bg-emerald-100 rounded-full border border-emerald-200">Active</span>
                                         @else
-                                            <span class="px-2 py-1 text-xs font-medium text-red-700 bg-red-100 rounded-full">Inactive</span>
+                                            <span class="px-3 py-1 text-[10px] font-black uppercase tracking-widest text-red-700 bg-red-100 rounded-full border border-red-200">Inactive</span>
                                         @endif
                                     </td>
-                                    <td class="px-4 py-4 text-sm whitespace-nowrap text-right">
+                                    <td class="px-6 py-5 text-sm whitespace-nowrap text-right">
                                         <div class="flex items-center justify-end gap-x-4">
                                             <a href="{{ route('admin.categories.show', $category) }}"
-                                               class="text-emerald-600 hover:text-emerald-900 dark:text-emerald-400">View</a>
+                                               class="text-emerald-500 hover:text-emerald-700 font-black transition-colors">View</a>
                                             <a href="{{ route('admin.categories.edit', $category) }}"
-                                               class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400">Edit</a>
+                                               class="text-slate-900 hover:text-emerald-600 font-black transition-colors">Edit</a>
                                             <button type="button" data-id="{{ $category->id }}"
                                                     class="text-red-600 hover:text-red-900 dark:text-red-400 delete-category-btn">Delete</button>
                                         </div>

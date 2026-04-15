@@ -15,7 +15,9 @@ class CategoryService
             $data['image'] = $request->file('image')->store('categories', 'public');
         }
 
-        return Category::create($data);
+        $category = Category::create($data);
+        $category->attributes()->sync($request->input('attributes', []));
+        return $category;
     }
 
     public function update(Request $request, Category $category)
@@ -27,6 +29,7 @@ class CategoryService
         }
 
         $category->update($data);
+        $category->attributes()->sync($request->input('attributes', []));
         return $category;
     }
 
