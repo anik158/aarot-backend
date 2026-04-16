@@ -2,9 +2,7 @@
 
 namespace App\Models\User;
 
-use App\Models\Admin\Color;
 use App\Models\Admin\Product;
-use App\Models\Admin\Size;
 use Illuminate\Database\Eloquent\Model;
 
 class OrderItem extends Model
