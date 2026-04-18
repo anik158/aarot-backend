@@ -77,7 +77,7 @@ class CheckoutService
                 OrderItem::create([
                     'order_id'   => $order->id,
                     'product_id' => $item['productId'],
-                    'options'    => json_encode($options),
+                    'options'    => $options,
                     'quantity'   => $item['qty'],
                     'price'      => $item['price'],
                 ]);
