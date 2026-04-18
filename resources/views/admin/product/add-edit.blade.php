@@ -33,8 +33,8 @@
                 <!-- Category Selection -->
                 <div class="col-span-1">
                     <label class="block mb-2 text-xs font-black uppercase tracking-widest text-slate-400">Department / Category</label>
-                    <x-admin.custom-select 
-                        name="category_id" 
+                    <x-admin.custom-select
+                        name="category_id"
                         id="category_id"
                         placeholder="Select Department..."
                         :selected="old('category_id', $edit ? $product->category_id : '')"
@@ -44,25 +44,25 @@
                 <!-- Basic Details -->
                 <div class="col-span-1">
                     <label class="block mb-2 text-xs font-black uppercase tracking-widest text-slate-400">Product Title</label>
-                    <x-admin.input id="name" name="name" type="text" placeholder="Global Identifier..." 
+                    <x-admin.input id="name" name="name" type="text" placeholder="Global Identifier..."
                                    value="{{ old('name', $edit ? $product->name : '') }}" required />
                 </div>
 
                 <div class="col-span-1">
                     <label class="block mb-2 text-xs font-black uppercase tracking-widest text-slate-400">Inventory SKU / Slug</label>
-                    <x-admin.input id="slug" name="slug" type="text" placeholder="url-identifier" 
+                    <x-admin.input id="slug" name="slug" type="text" placeholder="url-identifier"
                                    value="{{ old('slug', $edit ? $product->slug : '') }}" required />
                 </div>
 
                 <div class="col-span-1 md:col-span-1">
                     <label class="block mb-2 text-xs font-black uppercase tracking-widest text-slate-400">Yield Value / Price ($)</label>
-                    <x-admin.input name="price" type="number" step="0.01" placeholder="0.00" 
+                    <x-admin.input name="price" type="number" step="0.01" placeholder="0.00"
                                    value="{{ old('price', $edit ? $product->price : '') }}" required />
                 </div>
 
                 <div class="col-span-1 md:col-span-1">
                     <label class="block mb-2 text-xs font-black uppercase tracking-widest text-slate-400">Batch Qty / Stock</label>
-                    <x-admin.input name="qty" type="number" placeholder="Quantifiable amount..." 
+                    <x-admin.input name="qty" type="number" placeholder="Quantifiable amount..."
                                    value="{{ old('qty', $edit ? $product->qty : '') }}" required />
                 </div>
 
@@ -71,24 +71,54 @@
                     <x-admin.textarea id="description" name="description" rows="4" placeholder="Detailed product exposition...">{{ old('description', $edit ? $product->description : '') }}</x-admin.textarea>
                 </div>
 
-                <div class="col-span-1 md:col-span-2 text-left">
-                    <label class="block mb-2 text-xs font-black uppercase tracking-widest text-slate-400">Master Visual / Image</label>
-                    <div class="p-6 bg-slate-50 border border-slate-100 rounded-2xl">
-                        <input type="file" name="image" 
-                               class="block w-full text-xs text-slate-500 file:mr-4 file:py-3 file:px-6 file:rounded-xl file:border-0 file:text-xs file:font-black file:uppercase file:bg-slate-900 file:text-white hover:file:bg-slate-800 transition-all cursor-pointer">
-                        
-                        @if($edit && $product->image)
-                            <div class="mt-6 p-2 bg-white rounded-2xl border border-slate-200 w-fit shadow-lg shadow-slate-200/50">
-                                <img src="{{ asset($product->image) }}" class="w-32 h-32 object-cover rounded-xl" alt="Current visual">
-                            </div>
-                        @endif
+                <div class="col-span-1 md:col-span-2 space-y-8">
+                    <label class="block mb-2 text-xs font-black uppercase tracking-widest text-slate-400">Inventory Visuals / Product Images</label>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- First Image -->
+                        <div class="p-6 bg-slate-50 border border-slate-100 rounded-2xl">
+                            <label class="block mb-3 text-[10px] font-black uppercase tracking-widest text-slate-400">Master Visual <span class="text-emerald-500">*</span></label>
+                            <input type="file" name="first_image"
+                                   class="block w-full text-[10px] text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-[10px] file:font-black file:uppercase file:bg-slate-900 file:text-white hover:file:bg-slate-800 transition-all cursor-pointer">
+
+                            @if($edit && $product->first_image)
+                                <div class="mt-4 p-2 bg-white rounded-2xl border border-slate-200 w-fit shadow-md">
+                                    <img src="{{ asset($product->first_image) }}" class="w-20 h-20 object-cover rounded-xl" alt="Master Visual">
+                                </div>
+                            @endif
+                        </div>
+
+                        <!-- Second Image -->
+                        <div class="p-6 bg-slate-50 border border-slate-100 rounded-2xl">
+                            <label class="block mb-3 text-[10px] font-black uppercase tracking-widest text-slate-400">Side Angle / Aux 1</label>
+                            <input type="file" name="second_image"
+                                   class="block w-full text-[10px] text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-[10px] file:font-black file:uppercase file:bg-slate-900 file:text-white hover:file:bg-slate-800 transition-all cursor-pointer">
+
+                            @if($edit && $product->second_image)
+                                <div class="mt-4 p-2 bg-white rounded-2xl border border-slate-200 w-fit shadow-md">
+                                    <img src="{{ asset($product->second_image) }}" class="w-20 h-20 object-cover rounded-xl" alt="Aux 1">
+                                </div>
+                            @endif
+                        </div>
+
+                        <!-- Third Image -->
+                        <div class="p-6 bg-slate-50 border border-slate-100 rounded-2xl">
+                            <label class="block mb-3 text-[10px] font-black uppercase tracking-widest text-slate-400">Detail View / Aux 2</label>
+                            <input type="file" name="third_image"
+                                   class="block w-full text-[10px] text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-[10px] file:font-black file:uppercase file:bg-slate-900 file:text-white hover:file:bg-slate-800 transition-all cursor-pointer">
+
+                            @if($edit && $product->third_image)
+                                <div class="mt-4 p-2 bg-white rounded-2xl border border-slate-200 w-fit shadow-md">
+                                    <img src="{{ asset($product->third_image) }}" class="w-20 h-20 object-cover rounded-xl" alt="Aux 2">
+                                </div>
+                            @endif
+                        </div>
                     </div>
                 </div>
 
                 <div class="col-span-1">
                     <label class="block mb-2 text-xs font-black uppercase tracking-widest text-slate-400">Metric Status</label>
-                    <x-admin.custom-select 
-                        name="status" 
+                    <x-admin.custom-select
+                        name="status"
                         :selected="old('status', $edit ? $product->status : '1')"
                         :options="['1' => 'Operational / Active', '0' => 'Suspended / Hidden']" />
                 </div>
@@ -136,8 +166,8 @@
             </div>
 
             <div class="flex justify-end mt-16 pt-10 border-t border-slate-100">
-                <button type="submit" 
-                        class="px-16 py-6 font-black uppercase tracking-[0.2em] text-white transition-all duration-300 transform bg-emerald-500 rounded-3xl shadow-2xl shadow-emerald-500/30 hover:bg-emerald-600 hover:scale-[1.02] active:scale-[0.98] outline-none">
+                <button type="submit"
+                        class="px-16 py-6 font-black uppercase tracking-[0.2em] text-white hover:cursor-pointer transition-all duration-300 transform bg-emerald-500 rounded-3xl shadow-2xl shadow-emerald-500/30 hover:bg-emerald-600 hover:scale-[1.02] active:scale-[0.98] outline-none">
                     {{ $edit ? 'Synchronize Record' : 'Commit to Ledger' }}
                 </button>
             </div>
@@ -150,22 +180,22 @@
         <div class="flex items-center justify-center min-h-screen p-4 text-center sm:block sm:p-0">
             <!-- Background Overlay -->
             <div class="fixed inset-0 transition-opacity bg-slate-900/60 backdrop-blur-sm" id="modal-overlay"></div>
-            
+
             <!-- Centering Trick -->
             <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-            
+
             <!-- Modal Content Wrapper -->
             <div class="relative z-50 inline-block w-full max-w-lg px-8 py-10 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-2xl rounded-[3rem] border border-slate-200 opacity-100">
                 <div class="mb-8">
                     <h3 class="text-3xl font-black text-slate-900 tracking-tighter mb-2">Protocol Selection</h3>
                     <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Select relevant product specification</p>
                 </div>
-                
+
                 <div class="space-y-8">
                     <div>
                         <label class="block mb-3 text-[10px] font-black uppercase tracking-widest text-slate-400">Available Attributes</label>
-                        <x-admin.custom-select 
-                            name="modal-attribute-select" 
+                        <x-admin.custom-select
+                            name="modal-attribute-select"
                             id="modal-attribute-select"
                             placeholder="Choose Specification..." />
                     </div>
@@ -188,7 +218,7 @@
     <script>
         $(document).ready(function () {
             let currentCategoryAttributes = [];
-            
+
             // Listen for category selection change
             $('#category_id').on('change', function() {
                 const categoryId = $(this).val();
@@ -211,10 +241,10 @@
                 currentCategoryAttributes.forEach(attr => {
                     options[attr.id] = attr.name;
                 });
-                
+
                 // Dispatch event to Alpine component
-                window.dispatchEvent(new CustomEvent('update-options-modal-attribute-select', { 
-                    detail: options 
+                window.dispatchEvent(new CustomEvent('update-options-modal-attribute-select', {
+                    detail: options
                 }));
             }
 
@@ -317,7 +347,7 @@
                             if (xhr.status === 422) {
                                 errorMsg = Object.values(xhr.responseJSON.errors).flat().join('<br>');
                             } else if (xhr.status === 413) {
-                                errorMsg = "Payload exceeded: The visual asset is too massive for the buffer.";
+                                errorMsg = "The total size of your images is too large for the server to process. Please optimize your assets or upload smaller files.";
                             }
                             Swal.fire({ icon: "error", title: "Oops...", html: errorMsg });
                         }

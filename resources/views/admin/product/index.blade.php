@@ -81,7 +81,7 @@
                                                class="text-slate-900 hover:text-emerald-600 font-black transition-colors">Edit</a>
                                             <button type="button"
                                                     data-id="{{ $item->slug }}"
-                                                    class="text-red-500 hover:text-red-700 font-black delete-product-btn transition-colors">
+                                                    class="text-red-500 hover:text-red-700 hover:cursor-pointer font-black delete-product-btn transition-colors">
                                                 Delete
                                             </button>
                                         </div>

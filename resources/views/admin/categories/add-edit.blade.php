@@ -20,11 +20,11 @@
             </a>
         </div>
 
-        <div class="bg-white border border-slate-200 rounded-[2.5rem] shadow-2xl shadow-slate-200/50 overflow-hidden">
+        <div class="bg-white border border-slate-200 rounded-[2.5rem] shadow-2xl shadow-slate-200/50">
             <form action="{{ $edit ? route('admin.categories.update', $category) : route('admin.categories.store') }}"
                   method="POST"
                   id="categoryForm"
-                  class="p-10"
+                  class="p-10 pb-40"
                   enctype="multipart/form-data">
 
             @csrf
@@ -35,13 +35,13 @@
             <div class="grid grid-cols-1 gap-8 mt-6">
                 <div>
                     <label class="block mb-2 text-xs font-black uppercase tracking-widest text-slate-400">Category Full Name</label>
-                    <x-admin.input id="name" name="name" type="text" placeholder="Department title..." 
+                    <x-admin.input id="name" name="name" type="text" placeholder="Department title..."
                                    value="{{ old('name', $edit ? $category->name : '') }}" required />
                 </div>
 
                 <div>
                     <label class="block mb-2 text-xs font-black uppercase tracking-widest text-slate-400">URL Slug / Identifier</label>
-                    <x-admin.input id="slug" name="slug" type="text" placeholder="url-slug" 
+                    <x-admin.input id="slug" name="slug" type="text" placeholder="url-slug"
                                    value="{{ old('slug', $edit ? $category->slug : '') }}" required />
                 </div>
 
@@ -57,42 +57,43 @@
 
                     @if($edit && $category->image)
                         <div class="mt-6 p-2 bg-white rounded-2xl border border-slate-200 w-fit shadow-lg shadow-slate-200/50">
-                            <img src="{{ asset($category->image) }}" alt="Current Image" class="w-32 h-32 object-cover rounded-xl">
+                            <img src="{{ asset('storage/' . $category->image) }}" alt="Current Image" class="w-32 h-32 object-cover rounded-xl">
                         </div>
                     @endif
                 </div>
 
                 <div>
                     <label class="block mb-2 text-xs font-black uppercase tracking-widest text-slate-400">Collection Status</label>
-                    <x-admin.custom-select 
-                        name="status" 
+                    <x-admin.custom-select
+                        name="status"
                         :selected="old('status', $edit ? $category->status : '1')"
                         :options="['1' => 'Operational / Active', '0' => 'Disabled / Hidden']" />
                 </div>
 
-                <div class="mt-8 space-y-6">
-                    <div class="flex items-center justify-between">
-                        <h3 class="text-2xl font-black text-slate-900 tracking-tight">Specification Protocols</h3>
+                <div class="pt-10 mt-8 border-t border-slate-100">
+                    <div class="flex items-center gap-3 mb-4">
+                        <i class="fa-solid fa-microchip text-emerald-500"></i>
                         <span class="px-3 py-1 bg-emerald-50 text-emerald-600 border border-emerald-100 text-[10px] font-black uppercase tracking-widest rounded-full">Linked Specs</span>
                     </div>
-                    <p class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Select which attributes are relevant for products in this category (e.g. Size for Clothes, RAM for Laptops).</p>
-                    
-                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-6">
-                        @foreach($attributes as $attr)
-                            <label class="flex items-center gap-4 p-5 bg-white border border-slate-200 rounded-2xl cursor-pointer hover:border-emerald-400 hover:bg-slate-50/50 transition-all group">
-                                <input type="checkbox" name="attributes[]" value="{{ $attr->id }}"
-                                       @if($edit && $category->attributes->contains($attr->id)) checked @endif
-                                       class="w-5 h-5 text-emerald-500 border-slate-300 rounded-lg focus:ring-emerald-500/20 focus:ring-4">
-                                <span class="text-sm font-bold text-slate-700 group-hover:text-emerald-600 transition-colors">{{ $attr->name }}</span>
-                            </label>
-                        @endforeach
-                    </div>
+                    <p class="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-6">Select which attributes are relevant for products in this category (e.g. Size for Clothes, RAM for Laptops).</p>
+
+                    @php
+                        $attrOptions = $attributes->pluck('name', 'id')->toArray();
+                        $selectedAttrs = $edit ? $category->attributes->pluck('id')->map(fn($id) => (string)$id)->toArray() : [];
+                    @endphp
+
+                    <x-admin.multi-select 
+                        name="attributes" 
+                        id="attributes"
+                        :options="$attrOptions"
+                        :selected="$selectedAttrs"
+                        placeholder="Search and link specifications..." />
                 </div>
             </div>
 
             <div class="flex justify-end mt-12 pt-8 border-t border-slate-100">
                 <button type="submit"
-                        class="px-12 py-5 font-black uppercase tracking-[0.2em] text-white transition-all duration-300 transform bg-emerald-500 rounded-3xl shadow-2xl shadow-emerald-500/30 hover:bg-emerald-600 hover:scale-[1.02] active:scale-[0.98] outline-none">
+                        class="px-12 py-5 font-black uppercase tracking-[0.2em] text-white hover:cursor-pointer transition-all duration-300 transform bg-emerald-500 rounded-3xl shadow-2xl shadow-emerald-500/30 hover:bg-emerald-600 hover:scale-[1.02] active:scale-[0.98] outline-none">
                     {{ $edit ? 'Commit Sync' : 'Initialize Protocol' }}
                 </button>
             </div>

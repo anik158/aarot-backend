@@ -46,7 +46,7 @@
 
         <!-- User profile -->
         <div class="relative">
-            <button id="toggleDropdown" class="flex items-center gap-3 p-1 pl-4 pr-1 rounded-3xl bg-slate-900 group hover:bg-slate-800 transition-all duration-300 shadow-lg shadow-slate-900/10 active:scale-98">
+            <button id="toggleDropdown" class="flex items-center hover:cursor-pointer gap-3 p-1 pl-4 pr-1 rounded-3xl bg-slate-900 group hover:bg-slate-800 transition-all duration-300 shadow-lg shadow-slate-900/10 active:scale-98">
                 <span class="text-sm font-bold text-white tracking-tight">{{auth('admin')->user()->name ?? 'Administrator'}}</span>
                 <div class="w-9 h-9 overflow-hidden rounded-2xl bg-white/10 flex items-center justify-center group-hover:scale-105 transition-transform border border-white/5">
                     <img class="object-cover w-full h-full" src="https://ui-avatars.com/api/?name=Admin&background=10b981&color=fff" alt="Avatar">
@@ -63,9 +63,9 @@
                         <svg class="w-5 h-5 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                         Profile Protocol
                     </a>
-                    
+
                     <div class="h-px bg-slate-100 mx-4 my-2"></div>
-                    
+
                     <a href=""
                        class="flex items-center gap-3 px-6 py-4 text-sm font-black text-red-600 hover:bg-red-50 rounded-2xl transition-all"
                        onclick="event.preventDefault(); document.getElementById('adminLogout').submit();">

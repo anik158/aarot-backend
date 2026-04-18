@@ -56,7 +56,7 @@
                                             <a href="{{ route('admin.attributes.edit', $attribute) }}"
                                                class="text-emerald-500 hover:text-emerald-700 font-black transition-colors">Edit</a>
                                             <button type="button" data-id="{{ $attribute->id }}"
-                                                    class="text-red-600 hover:text-red-900 dark:text-red-400 delete-attribute-btn">Delete</button>
+                                                    class="text-red-600 hover:text-red-900 hover:cursor-pointer dark:text-red-400 delete-attribute-btn">Delete</button>
                                         </div>
                                     </td>
                                 </tr>

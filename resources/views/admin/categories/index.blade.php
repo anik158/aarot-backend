@@ -78,7 +78,7 @@
                                             <a href="{{ route('admin.categories.edit', $category) }}"
                                                class="text-slate-900 hover:text-emerald-600 font-black transition-colors">Edit</a>
                                             <button type="button" data-id="{{ $category->id }}"
-                                                    class="text-red-600 hover:text-red-900 dark:text-red-400 delete-category-btn">Delete</button>
+                                                    class="text-red-600 hover:text-red-900 hover:cursor-pointer dark:text-red-400 delete-category-btn">Delete</button>
                                         </div>
                                     </td>
                                 </tr>

@@ -85,7 +85,7 @@
                                                 <form action="{{ route('admin.reviews.status', $review->id) }}" method="POST">
                                                     @csrf @method('PATCH')
                                                     <input type="hidden" name="status" value="{{ \App\Models\Admin\Review::APPROVED }}">
-                                                    <button type="submit" class="p-2 bg-emerald-50 text-emerald-600 rounded-xl hover:bg-emerald-500 hover:text-white transition-all border border-emerald-100 shadow-sm shadow-emerald-100">
+                                                    <button type="submit" class="p-2 bg-emerald-50 text-emerald-600 rounded-xl hover:bg-emerald-500 hover:text-white hover:cursor-pointer transition-all border border-emerald-100 shadow-sm shadow-emerald-100">
                                                         <i class="fa-solid fa-check text-xs"></i>
                                                     </button>
                                                 </form>
@@ -95,13 +95,13 @@
                                                 <form action="{{ route('admin.reviews.status', $review->id) }}" method="POST">
                                                     @csrf @method('PATCH')
                                                     <input type="hidden" name="status" value="{{ \App\Models\Admin\Review::REJECTED }}">
-                                                    <button type="submit" class="p-2 bg-slate-900 text-white rounded-xl hover:bg-red-600 transition-all shadow-lg shadow-slate-900/10">
+                                                    <button type="submit" class="p-2 bg-slate-900 text-white rounded-xl hover:bg-red-600 hover:cursor-pointer transition-all shadow-lg shadow-slate-900/10">
                                                         <i class="fa-solid fa-ban text-xs"></i>
                                                     </button>
                                                 </form>
                                             @endif
 
-                                            <button type="button" data-id="{{ $review->id }}" class="p-2 text-slate-300 hover:text-red-500 transition-colors delete-review-btn">
+                                            <button type="button" data-id="{{ $review->id }}" class="p-2 text-slate-300 hover:text-red-500 hover:cursor-pointer transition-colors delete-review-btn">
                                                 <i class="fa-solid fa-trash-can text-xs"></i>
                                             </button>
                                         </div>
