@@ -25,7 +25,7 @@ class OrderController extends Controller
 
     public function showByOrderNumber($orderNumber)
     {
-        $order = Order::with(['items.product', 'items.color', 'items.size'])
+        $order = Order::with(['items.product'])
             ->where('order_number', $orderNumber)
             ->first();
 
